@@ -36,7 +36,19 @@ export default function Home() {
     <div className="h-screen">
         <Cabecalho curso={curso} nome={nome} />
         <Filtro />
-        
+        <table>
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>RA</th>
+              <th>Empresa</th>
+              <th>Período</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+          </tbody>
+        </table>
     </div>
   );
 }

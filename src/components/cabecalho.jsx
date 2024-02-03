@@ -2,6 +2,10 @@ import Image from "next/image";
 
 export default function Cabecalho({nome='', curso=''}){
 
+  nome = nome.split(' ')
+
+  let dropdown = false
+
   return (
       <header className="flex flex-col gap-5">
         <div className="w-full flex flex-row px-10 pt-3">
@@ -11,11 +15,36 @@ export default function Cabecalho({nome='', curso=''}){
           <Image className="w-[10%] h-[10vh]" src="/Logo_CPS.png" width={168} height={110} alt="Logo do Centro Paula Souza"/>
           </div>
         </div>
-        <nav className="w-full flex flex-row px-10 py-5 bg-red-800 text-white font-bold">
-          <h1 className="text-[18pt] w-[60%]">LISTA DE ESTUDANTES - {curso.toUpperCase()}</h1>
-          <div className="w-full text-[18pt] flex flex-row-reverse">
-              <h2>{nome}</h2>
+        <nav className="w-full text-white font-bold">
+          <div className="flex row-span-2">
+            <h1 className="text-[18pt] w-[90%]  py-[1.5%] px-[2%] bg-red-800">LISTA DE ESTUDANTES - {curso.toUpperCase()}</h1>
+            <div onClick={e=>{
+              let drop = document.getElementById('drop')
+              let down = document.getElementById('down')
+
+              if(dropdown){
+                dropdown = !dropdown
+
+                down.style='transform: translate(0,-100%); transition: all 0.5s ease-in-out'
+                drop.style='transition: all 0.9s ease-in-out'
+                setTimeout(()=>{
+                  drop.style=''
+                },900)
+
+              } else{
+                down.style='transform: translate(0,0%); transition: all 0.5s ease-in-out; z-index: 0'
+                drop.style='background-color: rgb(127, 29, 29)'
+
+                dropdown = !dropdown
+              }
+            }} id='drop' className={`cursor-pointer text-[18pt] w-[10%] py-[1.5%] bg-red-800 hover:bg-red-900 transition-colors`}>
+                <h2 className={'text-center'}>{nome[0]}</h2>
+            </div>
           </div>
+          <span id='down' onClick={e=>{
+            localStorage.clear()
+            window.location.reload()
+          }} className="cursor-pointer font-normal text-[16pt] bg-red-900 hover:text-red-800 transition-colors text-center w-[10%] absolute right-0 translate-y-[-100%] z-[-1]">Sair</span>
         </nav>
       </header>
   )
