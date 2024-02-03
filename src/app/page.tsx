@@ -59,7 +59,8 @@ export default function Home() {
             localStorage.setItem('cd_curso',resp.data[0].cd_curso)
             localStorage.setItem('nm_curso',resp.data[0].nm_curso)
 
-            window.location.replace("http://localhost:3000/studentList")
+            if(resp.data[0].nm_tipo == 'professor') window.location.replace("http://localhost:3000/studentList")
+            else window.location.replace("http://localhost:3000/studentListDir")
 
           } else setLoginCheck(true)
           

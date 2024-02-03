@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 
 import axios from 'axios'
 
-import Cabecalho from '../../components/cabecalho'
+import CabecalhoDiretoria from '../../components/cabecalhoDiretoria'
 
 import Filtro from '../../components/filtro'
 
@@ -37,7 +37,7 @@ export default function Home() {
 
   return (
     <div className="h-screen">
-        <Cabecalho curso={curso} nome={nome} />
+        <CabecalhoDiretoria page="est" nome={nome} />
         <Filtro />
         <table>
           <thead>

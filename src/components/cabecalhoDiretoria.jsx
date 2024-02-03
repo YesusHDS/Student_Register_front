@@ -1,6 +1,24 @@
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
-export default function Cabecalho({nome='', curso=''}){
+import axios from 'axios'
+
+export default function CabecalhoDiretoria({nome='', page=''}){
+
+    const [tipo, setTipo] = useState('')
+
+    useEffect(()=>{
+        setTipo(localStorage.getItem('nm_tipo'))
+
+        // axios({
+        //     method: 'post',
+        //     data:{
+        //         token: localStorage.getItem('token')
+        //     }
+        // }).then(res=>{
+        //     console.log(res)
+        // })
+    },[])
 
   nome = nome.split(' ')
 
@@ -17,7 +35,16 @@ export default function Cabecalho({nome='', curso=''}){
         </div>
         <nav className="w-full text-white font-bold">
           <div className="flex row-span-2">
-            <h1 className="text-[18pt] w-[90%]  py-[1.5%] px-[2%] bg-red-800">LISTA DE ESTUDANTES - {curso.toUpperCase()}</h1>
+            <h1 className="text-[18pt] w-[60%]  py-[1.5%] px-[2%] bg-red-800">LISTA DE ESTUDANTES</h1>
+            <a className={`text-[1.5vw] align-middle w-[10%] py-[1.5%] ${page=='est'?'bg-red-900':'bg-red-800'} hover:bg-red-900 transition-colors`} href="#">
+                <h2 className={'text-center'}>Estudantes</h2>
+            </a>
+            <a className={`text-[1.5vw] w-[10%] py-[1.5%] bg-red-800 hover:bg-red-900 transition-colors`} href="#">
+                <h2 className={'text-center'}>Professores</h2>
+            </a>
+            <a className={`text-[18pt] w-[10%] py-[1.5%] bg-red-800 hover:bg-red-900 transition-colors`} href="#">
+                <h2 className={'text-center'}>Cursos</h2>
+            </a>
             <div onClick={e=>{
               let drop = document.getElementById('drop')
               let down = document.getElementById('down')
