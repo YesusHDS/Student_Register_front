@@ -9,7 +9,7 @@ export default function Cabecalho({nome='', curso=''}){
   return (
       <header className="flex flex-col gap-5">
         <div className="w-full flex flex-row px-10 pt-3">
-          <Image className="w-[15%] h-[10vh]" src="/Logo_Fatec.png" width={291} height={126} alt="Logo da Fatec Praia Grande"/>
+          <Image className="w-[15%] h-[10vh]" priority={true} src="/Logo_Fatec.png" width={291} height={126} alt="Logo da Fatec Praia Grande"/>
           <div className="w-full flex flex-row-reverse gap-16">
           <Image className="w-[15%] h-[10vh]" src="/Logo_SP.png" width={402} height={140} alt="Logo do Governo do Estado de São Paulo"/>
           <Image className="w-[10%] h-[10vh]" src="/Logo_CPS.png" width={168} height={110} alt="Logo do Centro Paula Souza"/>
@@ -42,8 +42,9 @@ export default function Cabecalho({nome='', curso=''}){
             </div>
           </div>
           <span id='down' onClick={e=>{
-            window.location.reload()
             localStorage.clear()
+            window.location.replace('http://localhost:3000/')
+            
           }} className="cursor-pointer font-normal text-[16pt] bg-red-900 hover:text-red-800 transition-colors text-center w-[10%] absolute right-0 translate-y-[-100%] z-[-1]">Sair</span>
         </nav>
       </header>
