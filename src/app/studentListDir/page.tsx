@@ -13,8 +13,11 @@ import Filtro from '../../components/filtro'
 
 export default function Home() {
 
+  const [cursos, setCursos] = useState([{
+    cd_curso: '',
+    nm_curso: ''
+  }])
   
-
   const [nome,setNome] = useState('')
   const [curso,setCurso] = useState('')
   const [tipo, setTipo] = useState('')
@@ -37,42 +40,48 @@ export default function Home() {
   const [newNome, setNewNome] = useState('')
   const [newRA, setNewRA] = useState('')
   const [newEmpresa, setNewEmpresa] = useState('')
+  const [newCurso, setNewCurso] = useState('0')
   const [newComeco, setNewComeco] = useState('')
   const [newTermino, setNewTermino] = useState('')
 
   function newValidar(){
     setErro('')
+    let val = true
 
     if(newTermino.length==0){
       setErro('O fim do período é obrigatório!')
+      val = false
     } 
-    // else{
-    //   setNewTermino(`${newTermino.split('-')[2]}/${newTermino.split('-')[1]}/${newTermino.split('-')[0]}`)
-    // }
 
     if(newComeco.length==0){
       setErro('O começo do período é obrigatório!')
+      val = false
     } 
-    // else{
-    //   setNewComeco(`${newComeco.split('-')[2]}/${newComeco.split('-')[1]}/${newComeco.split('-')[0]}`)
-    // }
 
+    if(newCurso=='0'){
+      setErro('O campo do curso é obrigatório!')
+      val = false
+    }
 
     if(newEmpresa.length==0){
       setErro('O campo empresa é obrigatório!')
+      val = false
     }
 
 
     if(newRA.length==0){
       setErro('O campo RA é obrigatório!')
+      val = false
     }
 
 
     if(newNome.length==0){
       setErro('O campo nome é obrigatório!')
+      val = false
     }
 
-    if(erro == ''){
+    if(val){
+
 
       axios({
         method: 'post',
@@ -119,6 +128,13 @@ export default function Home() {
 
     axios({
       method: 'get',
+      url: `https://student-register-bnaf.onrender.com/curso`,
+    }).then(res =>{
+      setCursos(res.data.filter(({nm_curso=''})=>nm_curso != 'DIRETORIA'))
+    })
+
+    axios({
+      method: 'get',
       url: `https://student-register-bnaf.onrender.com/estagiario?search=${filtroNome}&empresa=${filtroEmpresa}&RA=${filtroRA}`,
     }).then(res =>{
       setEstagiarios(res.data)
@@ -142,6 +158,7 @@ export default function Home() {
         setNewNome('')
         setNewRA('')
         setNewEmpresa('')
+        setNewCurso('0')
         setNewComeco('')
         setNewTermino('')
         setErro('')
@@ -152,7 +169,20 @@ export default function Home() {
       <form onSubmit={e=>{e.preventDefault()}} action="#" className="bg-red-800 text-white w-[92%] mx-auto text-[14pt] p-3 flex flex-col" >
         Nome <input value={newNome} onChange={e=>{setNewNome(e.target.value)}} type="text" className="w-full text-black p-1 mb-3" />
         RA <input value={newRA} onChange={e=>{setNewRA(e.target.value)}} type="text" className="w-full text-black p-1 mb-3" />
-        Empresa <input value={newEmpresa} onChange={e=>{setNewEmpresa(e.target.value)}} type="text" className="w-full text-black p-1 mb-3" />
+        Empresa <input onChange={e=>{setNewEmpresa(e.target.value)}} type="text" className="w-full text-black p-1 mb-3" />
+        Curso
+        <select id='select' className="w-full text-black p-1 mb-3" value={newCurso} onChange={e=>{setNewCurso(e.target.value)}}>
+          <option disabled value={'0'}>Escolha o curso...</option>
+          {
+            cursos.length>0 &&
+            cursos.map(({
+              cd_curso,
+              nm_curso
+            })=>(
+              <option key={cd_curso} value={cd_curso}>{nm_curso}</option>
+            ))
+          }
+        </select>
         Período <div><input value={newComeco} onChange={e=>{setNewComeco(e.target.value)}} type="date" className="w-[40%] text-black p-1 mb-3" /> até <input onChange={e=>{setNewTermino(e.target.value)}} type="date" className="w-[40%] text-black p-1 mb-3" /></div>
         <div className="bg-white text-red-600 w-full text-center">
             {erro}

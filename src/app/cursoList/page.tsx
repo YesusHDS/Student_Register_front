@@ -30,13 +30,14 @@ export default function Home() {
 
   function newValidar(){
     setErro('')
-
+    let val = true
 
     if(newCurso.length==0){
       setErro('O nome do curso é obrigatório!')
+      val = false
     } 
 
-    if(erro == ''){
+    if(val){
 
       axios({
         method: 'post',

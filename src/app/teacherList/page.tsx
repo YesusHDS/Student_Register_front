@@ -13,7 +13,10 @@ import Filtro from '../../components/filtro'
 
 export default function Home() {
 
-  
+  const [cursos, setCursos] = useState([{
+    cd_curso: '',
+    nm_curso: ''
+  }])
 
   const [nome,setNome] = useState('')
 
@@ -30,25 +33,29 @@ export default function Home() {
   const [darkscreen, setDarkcreen] = useState('invisible')
   const [erro, setErro] = useState('')
   const [newNome, setNewNome] = useState('')
-  const [newCurso, setNewCurso] = useState('')
+  const [newCurso, setNewCurso] = useState('0')
   const [newSenha, setNewSenha] = useState('')
 
   function newValidar(){
     setErro('')
+    let val = true
 
     if(newSenha.length==0){
       setErro('A senha é obrigatória!')
+      val = false
     } 
 
-    if(newCurso.length==0){
-      setErro('O curso é obrigatório!')
-    } 
+    if(newCurso=='0'){
+      setErro('O campo do curso é obrigatório!')
+      val = false
+    }
 
     if(newNome.length==0){
       setErro('O campo nome é obrigatório!')
+      val = false
     }
 
-    if(erro == ''){
+    if(val){
 
       axios({
         method: 'post',
@@ -86,6 +93,13 @@ export default function Home() {
       setProfessores(res.data)
     })
 
+    axios({
+      method: 'get',
+      url: `https://student-register-bnaf.onrender.com/curso`,
+    }).then(res =>{
+      setCursos(res.data.filter(({nm_curso=''})=>nm_curso != 'DIRETORIA'))
+    })
+
   },[filtroNome, filtroCurso])
 
   const deleteEstagiario = (cd:String)=>{
@@ -102,7 +116,7 @@ export default function Home() {
     <div className="h-screen">
       <div onClick={e=>{
         setNewNome('')
-        setNewCurso('')
+        setNewCurso('0')
         setNewSenha('')
         setErro('')
         setDarkcreen('invisible')
@@ -111,7 +125,19 @@ export default function Home() {
       <h1 className="text-red-800 text-[18pt] font-bold text-center">Novo Professor</h1>
       <form onSubmit={e=>{e.preventDefault()}} action="#" className="bg-red-800 text-white w-[92%] mx-auto text-[14pt] p-3 flex flex-col" >
         Nome <input value={newNome} onChange={e=>{setNewNome(e.target.value)}} type="text" className="w-full text-black p-1 mb-3" />
-        Curso <input value={newCurso} onChange={e=>{setNewCurso(e.target.value)}} type="text" className="w-full text-black p-1 mb-3" />
+        Curso
+        <select id='select' className="w-full text-black p-1 mb-3" value={newCurso} onChange={e=>{setNewCurso(e.target.value)}}>
+          <option disabled value={'0'}>Escolha o curso...</option>
+          {
+            cursos.length>0 &&
+            cursos.map(({
+              cd_curso,
+              nm_curso
+            })=>(
+              <option key={cd_curso} value={cd_curso}>{nm_curso}</option>
+            ))
+          }
+        </select>
         Senha <input value={newSenha} onChange={e=>{setNewSenha(e.target.value)}} type="password" className="w-full text-black p-1 mb-3" />
         <div className="bg-white text-red-600 w-full text-center">
             {erro}

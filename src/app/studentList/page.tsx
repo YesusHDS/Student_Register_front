@@ -42,37 +42,36 @@ export default function Home() {
 
   function newValidar(){
     setErro('')
+    let val = true
 
     if(newTermino.length==0){
       setErro('O fim do período é obrigatório!')
+      val = false
     } 
-    // else{
-    //   setNewTermino(`${newTermino.split('-')[2]}/${newTermino.split('-')[1]}/${newTermino.split('-')[0]}`)
-    // }
 
     if(newComeco.length==0){
       setErro('O começo do período é obrigatório!')
+      val = false
     } 
-    // else{
-    //   setNewComeco(`${newComeco.split('-')[2]}/${newComeco.split('-')[1]}/${newComeco.split('-')[0]}`)
-    // }
-
 
     if(newEmpresa.length==0){
       setErro('O campo empresa é obrigatório!')
+      val = false
     }
 
 
     if(newRA.length==0){
       setErro('O campo RA é obrigatório!')
+      val = false
     }
 
 
     if(newNome.length==0){
       setErro('O campo nome é obrigatório!')
+      val = false
     }
 
-    if(erro == ''){
+    if(val){
 
       axios({
         method: 'post',
