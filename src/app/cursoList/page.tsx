@@ -64,7 +64,7 @@ export default function Home() {
         token: localStorage.getItem('token')
       }
     }).then(({data})=>{
-      if (data.length == 0) window.location.replace('http://localhost:3000/') 
+      if (data.length == 0) window.location.replace('https://sr-front.vercel.app') 
     })
 
     axios({

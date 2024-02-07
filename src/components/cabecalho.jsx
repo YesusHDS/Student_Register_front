@@ -43,7 +43,7 @@ export default function Cabecalho({nome='', curso=''}){
           </div>
           <span id='down' onClick={e=>{
             localStorage.clear()
-            window.location.replace('http://localhost:3000/')
+            window.location.replace('https://sr-front.vercel.app/')
             
           }} className="cursor-pointer font-normal text-[16pt] bg-red-900 hover:text-red-800 transition-colors text-center w-[10%] absolute right-0 translate-y-[-100%] z-[-1]">Sair</span>
         </nav>
