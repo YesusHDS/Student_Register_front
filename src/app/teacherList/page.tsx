@@ -151,6 +151,7 @@ export default function Home() {
         filter2={'Curso'} set2={setFiltroCurso}
         filter3={''} set3={''}
         btn={setDarkcreen}
+        btn2={''}
         opt='professor'
       />
       <div className="bg-zinc-200 mt-7 text-center mx-auto w-[80%] p-2">

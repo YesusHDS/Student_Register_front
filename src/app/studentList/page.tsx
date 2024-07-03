@@ -167,6 +167,7 @@ export default function Home() {
         filter2={'Empresa'} set2={setFiltroEmpresa}
         filter3={'RA'} set3={setFiltroRA}
         btn={setDarkcreen}
+        btn2={''}
         opt='aluno'
       />
       <div className="bg-zinc-200 mt-7 text-center mx-auto w-[80%] p-2">
