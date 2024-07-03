@@ -17,7 +17,7 @@ export default function Cabecalho({nome='', curso=''}){
         </div>
         <nav className="w-full text-white font-bold">
           <div className="flex row-span-2">
-            <h1 className="text-[18pt] w-[90%]  py-[1.5%] px-[2%] bg-red-800">LISTA DE ESTUDANTES - {curso.toUpperCase()}</h1>
+            <h1 className="text-[18pt] w-[90%]  py-[1.5%] px-[2%] bg-red-800">CADASTRO DE ESTUDANTES - {curso.toUpperCase()}</h1>
             <div onClick={e=>{
               let drop = document.getElementById('drop')
               let down = document.getElementById('down')
@@ -43,7 +43,7 @@ export default function Cabecalho({nome='', curso=''}){
           </div>
           <span id='down' onClick={e=>{
             localStorage.clear()
-            window.location.replace('https://sr-front.vercel.app/')
+            window.location.replace('http://localhost:3000/')
             
           }} className="cursor-pointer font-normal text-[16pt] bg-red-900 hover:text-red-800 transition-colors text-center w-[10%] absolute right-0 translate-y-[-100%] z-[-1]">Sair</span>
         </nav>
