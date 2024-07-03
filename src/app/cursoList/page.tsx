@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 
-import {Trash2, Pencil, Check} from 'lucide-react'
+import {Trash2, Pencil, Check, Plus} from 'lucide-react'
 
 import axios from 'axios'
 
