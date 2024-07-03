@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 
-import {Trash2} from 'lucide-react'
+import {Trash2, Pencil, Check} from 'lucide-react'
 
 import axios from 'axios'
 
@@ -25,11 +25,21 @@ export default function Home() {
     nm_cicloestagio: ''
   }])
 
+  const [ciclos, setCiclos] = useState([{
+    cd_ciclo: '',
+    cd_curso: '',
+    nm_ciclo: ''
+  }])
+
   const [darkscreen, setDarkcreen] = useState('invisible')
+  const [newCursoScreen, setNewCursoScreen] = useState('invisible')
+  const [ciclosScreen, setCiclosScreen] = useState('invisible')
   const [erro, setErro] = useState('')
   const [newCurso, setNewCurso] = useState('')
   const [newCicloEstagio, setNewCicloEstagio] = useState('')
   const [cicloQtd, setCicloQtd] = useState('')
+  const [editFlag, setEditFlag] = useState('')
+  const [cicloName,setCicloName] = useState('')
 
   function newValidar(){
     setErro('')
@@ -89,12 +99,28 @@ export default function Home() {
         url: 'https://student-register-bnaf.onrender.com/ciclo',
         data:{
           cd_curso,
-          nm_ciclo: i
+          nm_ciclo: `Ciclo ${i}`
         }
       })
     }
 
     window.location.reload()
+
+  }
+
+  function buscarCiclos(cd_curso:String){
+    axios({
+      method: 'get',
+      url: `https://student-register-bnaf.onrender.com/ciclo?curso=${cd_curso}`
+    }).then(res=>{
+      setCiclos(res.data)
+
+      setDarkcreen('visible')
+      
+      setCiclosScreen('visible')
+
+    })
+
 
   }
 
@@ -130,6 +156,28 @@ export default function Home() {
     setCursos(cursos.filter(({cd_curso})=>cd_curso != cd))
   }
 
+  const deleteCiclo = (cd:String)=>{
+    axios({
+      method: 'delete',
+      url: `https://student-register-bnaf.onrender.com/ciclo/${cd}`
+    })
+  
+    setCiclos(ciclos.filter(({cd_ciclo})=>cd_ciclo != cd))
+  }
+
+  const atualizaCiclo = (cd_curso:String, cd:String)=>{
+    axios({
+      method: 'put',
+      url: `https://student-register-bnaf.onrender.com/ciclo/${cd}`,
+      data:{
+        cd_curso,
+        nm_ciclo: cicloName
+      }
+    }).then(res=>{
+      buscarCiclos(cd_curso)
+    })
+  }
+
 
   return (
     <div className="h-screen">
@@ -137,8 +185,12 @@ export default function Home() {
         setNewCurso('')
         setErro('')
         setDarkcreen('invisible')
+        setCiclosScreen('invisible')
+        setNewCursoScreen('invisible')
+        setEditFlag('')
+        setCicloName('')
         }} className={`bg-black/80 fixed w-[100%] h-[100vh] ${darkscreen}`}></div>
-      <div className={`fixed bg-white w-[30%] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ${darkscreen}`}>
+      <div className={`fixed bg-white w-[30%] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ${newCursoScreen}`}>
       <h1 className="text-red-800 text-[18pt] font-bold text-center">Novo Curso</h1>
       <form onSubmit={e=>{e.preventDefault()}} action="#" className="bg-red-800 text-white w-[92%] mx-auto text-[14pt] p-3 flex flex-col" >
         Nome do curso <input value={newCurso} onChange={e=>{setNewCurso(e.target.value)}}
@@ -153,12 +205,34 @@ export default function Home() {
         <input type="button" onClick={e=>{newValidar()}} value="CADASTRAR" className="cursor-pointer text-red-800 bg-white p-3 w-[50%] mx-auto mt-5 hover:bg-red-700 hover:text-white transition-colors" />
       </form>
       </div>
+      <div className={`fixed p-2 bg-white w-[30%] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ${ciclosScreen}`}>
+        <h1 className="text-red-800 text-[18pt] font-bold text-center">Ciclos</h1>
+        <div className="bg-zinc-200 text-center mx-auto w-[80%] p-2">
+
+          { ciclos.length>0?
+            ciclos.map(({cd_ciclo, nm_ciclo, cd_curso})=>(
+              <div key={cd_ciclo} className="p-3 hover:bg-slate-50">
+                {editFlag==cd_ciclo?
+                  <input type="text" className="w-[50%]" id="nm_ciclo" value={cicloName} onChange={e=>setCicloName(e.target.value)} />:
+                  <p className="inline mr-[48%]">{nm_ciclo}</p>
+                }
+                {editFlag!=cd_ciclo?
+                <Pencil height={18} onClick={e=>{setEditFlag(cd_ciclo); setCicloName(nm_ciclo)}} className="ml-10 inline cursor-pointer hover:text-yellow-800" />:
+                <Check height={18} onClick={e=>{setEditFlag(''); atualizaCiclo(cd_curso, cd_ciclo)}} className="ml-10 inline cursor-pointer hover:text-yellow-800" />}
+                <Trash2 height={18} onClick={e=>{deleteCiclo(cd_ciclo)}} className="mx-1 inline cursor-pointer hover:text-red-800" />
+              </div>
+            )):
+            <div>Nenhum ciclo cadastrado...</div>
+          }
+        </div>
+      </div>
       <CabecalhoDiretoria page='cur' nome={nome} />
       <Filtro 
         filter1={'Curso'} set1={setFiltroCurso}
         filter2={''} set2={''}
         filter3={''} set3={''}
         btn={setDarkcreen}
+        btn2={setNewCursoScreen}
         opt='curso'
       />
       <div className="bg-zinc-200 mt-7 text-center mx-auto w-[80%] p-2">
@@ -177,11 +251,15 @@ export default function Home() {
                 nm_curso,
                 nm_cicloestagio
               })=>(
-                <tr key={cd_curso} className="text-left bg-white h-10">
-                  <td className="">{nm_curso}</td>
+                <tr 
+                key={cd_curso} 
+                className="text-left bg-white h-10 cursor-pointer hover:bg-slate-50"
+                >
+                  <td onClick={e=>{buscarCiclos(cd_curso)}} className="">{nm_curso}</td>
                   <td className="">{nm_cicloestagio}</td>
                   <td className=""><Trash2 onClick={e=>{deleteCurso(cd_curso)}} className="cursor-pointer hover:text-red-800" /></td>
                 </tr>
+                
               ))
             }
           </tbody>
