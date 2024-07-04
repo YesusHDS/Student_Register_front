@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 
-import {Trash2, Pencil, Check, Plus} from 'lucide-react'
+import {Trash2, Pencil, Check} from 'lucide-react'
 
 import axios from 'axios'
 
@@ -40,6 +40,7 @@ export default function Home() {
   const [cicloQtd, setCicloQtd] = useState('')
   const [editFlag, setEditFlag] = useState('')
   const [cicloName,setCicloName] = useState('')
+  const [cursoCod,setCursoCod] = useState('')
 
   function newValidar(){
     setErro('')
@@ -135,7 +136,7 @@ export default function Home() {
         token: localStorage.getItem('token')
       }
     }).then(({data})=>{
-      if (data.length == 0) window.location.replace('https://sr-front.vercel.app') 
+      if (data.length == 0) window.location.replace('http://localhost:3000') 
     })
 
     axios({
@@ -178,6 +179,19 @@ export default function Home() {
     })
   }
 
+  const criaCiclo = ()=>{
+    axios({
+      method: 'post',
+      url: `https://student-register-bnaf.onrender.com/ciclo`,
+      data:{
+        cd_curso: cursoCod,
+        nm_ciclo: 'Novo ciclo'
+      }
+    }).then(res=>{
+      buscarCiclos(cursoCod)
+    })
+  }
+
 
   return (
     <div className="h-screen">
@@ -206,20 +220,25 @@ export default function Home() {
       </form>
       </div>
       <div className={`fixed p-2 bg-white w-[30%] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ${ciclosScreen}`}>
-        <h1 className="text-red-800 text-[18pt] font-bold text-center">Ciclos</h1>
-        <div className="bg-zinc-200 text-center mx-auto w-[80%] p-2">
+        <div className="flex font-bold mx-auto w-[80%]">
+          <h1 className="text-red-800 text-[18pt] ml-5">Ciclos</h1>
+          <button className="text-[25pt] ml-auto h-9 translate-y-[-10px] hover:text-green-500" onClick={e=>{criaCiclo()}}>+</button>
+        </div>
+        <div className="bg-zinc-200 mx-auto w-[80%] p-2">
 
           { ciclos.length>0?
             ciclos.map(({cd_ciclo, nm_ciclo, cd_curso})=>(
-              <div key={cd_ciclo} className="p-3 hover:bg-slate-50">
+              <div key={cd_ciclo} className="p-3  hover:bg-slate-50 flex">
                 {editFlag==cd_ciclo?
-                  <input type="text" className="w-[50%]" id="nm_ciclo" value={cicloName} onChange={e=>setCicloName(e.target.value)} />:
-                  <p className="inline mr-[48%]">{nm_ciclo}</p>
+                  <input maxLength={10} type="text" className="w-[50%]" id="nm_ciclo" value={cicloName} onChange={e=>setCicloName(e.target.value)} />:
+                  <p className="">{nm_ciclo}</p>
                 }
-                {editFlag!=cd_ciclo?
-                <Pencil height={18} onClick={e=>{setEditFlag(cd_ciclo); setCicloName(nm_ciclo)}} className="ml-10 inline cursor-pointer hover:text-yellow-800" />:
-                <Check height={18} onClick={e=>{setEditFlag(''); atualizaCiclo(cd_curso, cd_ciclo)}} className="ml-10 inline cursor-pointer hover:text-yellow-800" />}
-                <Trash2 height={18} onClick={e=>{deleteCiclo(cd_ciclo)}} className="mx-1 inline cursor-pointer hover:text-red-800" />
+                <div className="ml-auto">
+                  {editFlag!=cd_ciclo?
+                  <Pencil height={18} onClick={e=>{setEditFlag(cd_ciclo); setCicloName(nm_ciclo)}} className="inline cursor-pointer hover:text-yellow-800" />:
+                  <Check height={18} onClick={e=>{setEditFlag(''); atualizaCiclo(cd_curso, cd_ciclo)}} className="inline cursor-pointer hover:text-yellow-800" />}
+                  <Trash2 height={18} onClick={e=>{deleteCiclo(cd_ciclo)}} className="inline cursor-pointer hover:text-red-800" />
+                </div>
               </div>
             )):
             <div>Nenhum ciclo cadastrado...</div>
@@ -255,7 +274,7 @@ export default function Home() {
                 key={cd_curso} 
                 className="text-left bg-white h-10 cursor-pointer hover:bg-slate-50"
                 >
-                  <td onClick={e=>{buscarCiclos(cd_curso)}} className="">{nm_curso}</td>
+                  <td onClick={e=>{buscarCiclos(cd_curso); setCursoCod(cd_curso)}} className="">{nm_curso}</td>
                   <td className="">{nm_cicloestagio}</td>
                   <td className=""><Trash2 onClick={e=>{deleteCurso(cd_curso)}} className="cursor-pointer hover:text-red-800" /></td>
                 </tr>
