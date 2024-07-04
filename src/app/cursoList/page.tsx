@@ -38,6 +38,7 @@ export default function Home() {
   const [newCurso, setNewCurso] = useState('')
   const [newCicloEstagio, setNewCicloEstagio] = useState('')
   const [cicloQtd, setCicloQtd] = useState('')
+  const [editCurso, setEditCurso] = useState('')
   const [editFlag, setEditFlag] = useState('')
   const [cicloName,setCicloName] = useState('')
   const [cursoCod,setCursoCod] = useState('')
@@ -166,6 +167,28 @@ export default function Home() {
     setCiclos(ciclos.filter(({cd_ciclo})=>cd_ciclo != cd))
   }
 
+  const atualizaCurso = (cd_curso:String)=>{
+
+    axios({
+      method: 'put',
+      url: `https://student-register-bnaf.onrender.com/curso/${cd_curso}`,
+      data:{
+        nm_curso: newCurso,
+        nm_cicloEstagio: cicloName
+      }
+    }).then(res=>{
+
+      console.log(res);
+
+      axios({
+        method: 'get',
+        url: `https://student-register-bnaf.onrender.com/curso?search=${filtroCurso}`,
+      }).then(res =>{
+        setCursos(res.data)      
+      })
+    })
+  }
+
   const atualizaCiclo = (cd_curso:String, cd:String)=>{
     axios({
       method: 'put',
@@ -228,7 +251,7 @@ export default function Home() {
 
           { ciclos.length>0?
             ciclos.map(({cd_ciclo, nm_ciclo, cd_curso})=>(
-              <div key={cd_ciclo} className="p-3  hover:bg-slate-50 flex">
+              <div key={cd_ciclo} className="p-3 cursor-pointer  hover:bg-slate-50 flex">
                 {editFlag==cd_ciclo?
                   <input maxLength={10} type="text" className="w-[50%]" id="nm_ciclo" value={cicloName} onChange={e=>setCicloName(e.target.value)} />:
                   <p className="">{nm_ciclo}</p>
@@ -274,8 +297,23 @@ export default function Home() {
                 key={cd_curso} 
                 className="text-left bg-white h-10 cursor-pointer hover:bg-slate-50"
                 >
-                  <td onClick={e=>{buscarCiclos(cd_curso); setCursoCod(cd_curso)}} className="">{nm_curso}</td>
-                  <td className="">{nm_cicloestagio}</td>
+                  
+                  
+
+                  {editCurso==cd_curso?
+                    <td><input maxLength={10} type="text" className="w-[50%]" id="cd_curso" value={newCurso} onChange={e=>setNewCurso(e.target.value)} /></td>:
+                    <td onClick={e=>{buscarCiclos(cd_curso); setCursoCod(cd_curso)}} className="">{nm_curso}</td>
+                  }
+
+                  {editCurso==cd_curso?
+                    <td><input maxLength={10} type="text" className="w-[50%]" id="cd_curso" value={cicloName} onChange={e=>setCicloName(e.target.value)} /></td>:
+                    <td className="">{nm_cicloestagio}</td>
+                  }
+
+                  {editCurso!=cd_curso?
+                    <td><Pencil onClick={e=>{setEditCurso(cd_curso); setNewCurso(nm_curso); setCicloName(nm_cicloestagio)}} className="cursor-pointer hover:text-yellow-800" /></td>:
+                    <td><Check onClick={e=>{setEditCurso(''); atualizaCurso(cd_curso)}} className="cursor-pointer hover:text-yellow-800" /></td>
+                  }
                   <td className=""><Trash2 onClick={e=>{deleteCurso(cd_curso)}} className="cursor-pointer hover:text-red-800" /></td>
                 </tr>
                 
