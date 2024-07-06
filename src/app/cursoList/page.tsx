@@ -25,6 +25,12 @@ export default function Home() {
     nm_cicloestagio: ''
   }])
 
+  const [turnos, setTurnos] = useState([{
+    cd_turno: '',
+    cd_curso: '',
+    nm_turno: ''
+  }])
+
   const [ciclos, setCiclos] = useState([{
     cd_ciclo: '',
     cd_curso: '',
@@ -37,10 +43,12 @@ export default function Home() {
   const [erro, setErro] = useState('')
   const [newCurso, setNewCurso] = useState('')
   const [newCicloEstagio, setNewCicloEstagio] = useState('')
+  const [opt, setOpt] = useState('1')
   const [cicloQtd, setCicloQtd] = useState('')
   const [editCurso, setEditCurso] = useState('')
   const [editFlag, setEditFlag] = useState('')
   const [cicloName,setCicloName] = useState('')
+  const [turnoName,setTurnoName] = useState('')
   const [cursoCod,setCursoCod] = useState('')
 
   function newValidar(){
@@ -122,8 +130,15 @@ export default function Home() {
       setCiclosScreen('visible')
 
     })
+  }
 
-
+  function buscarTurnos(cd_curso:String){
+    axios({
+      method: 'get',
+      url: `https://student-register-bnaf.onrender.com/turno?curso=${cd_curso}`
+    }).then(res=>{
+      setTurnos(res.data)
+    })
   }
 
   useEffect(()=>{
@@ -165,6 +180,15 @@ export default function Home() {
     })
   
     setCiclos(ciclos.filter(({cd_ciclo})=>cd_ciclo != cd))
+  }
+
+  const deleteTurno = (cd:String)=>{
+    axios({
+      method: 'delete',
+      url: `https://student-register-bnaf.onrender.com/turno/${cd}`
+    })
+  
+    setTurnos(turnos.filter(({cd_turno})=>cd_turno != cd))
   }
 
   const atualizaCurso = (cd_curso:String)=>{
@@ -215,6 +239,32 @@ export default function Home() {
     })
   }
 
+  const atualizaTurno = (cd_curso:String, cd:String)=>{
+    axios({
+      method: 'put',
+      url: `https://student-register-bnaf.onrender.com/turno/${cd}`,
+      data:{
+        cd_curso,
+        nm_turno: turnoName
+      }
+    }).then(res=>{
+      buscarTurnos(cd_curso)
+    })
+  }
+
+  const criaTurno = ()=>{
+    axios({
+      method: 'post',
+      url: `https://student-register-bnaf.onrender.com/turno`,
+      data:{
+        cd_curso: cursoCod,
+        nm_turno: 'Novo turno'
+      }
+    }).then(res=>{
+      buscarTurnos(cursoCod)
+    })
+  }
+
 
   return (
     <div className="h-screen">
@@ -226,6 +276,7 @@ export default function Home() {
         setNewCursoScreen('invisible')
         setEditFlag('')
         setCicloName('')
+        setOpt('1')
         }} className={`bg-black/80 fixed w-[100%] h-[100vh] ${darkscreen}`}></div>
       <div className={`fixed bg-white w-[30%] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ${newCursoScreen}`}>
       <h1 className="text-red-800 text-[18pt] font-bold text-center">Novo Curso</h1>
@@ -243,30 +294,60 @@ export default function Home() {
       </form>
       </div>
       <div className={`fixed p-2 bg-white w-[30%] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ${ciclosScreen}`}>
-        <div className="flex font-bold mx-auto w-[80%]">
-          <h1 className="text-red-800 text-[18pt] ml-5">Ciclos</h1>
-          <button className="text-[25pt] ml-auto h-9 translate-y-[-10px] hover:text-green-500" onClick={e=>{criaCiclo()}}>+</button>
-        </div>
-        <div className="bg-zinc-200 mx-auto w-[80%] p-2">
 
-          { ciclos.length>0?
-            ciclos.map(({cd_ciclo, nm_ciclo, cd_curso})=>(
-              <div key={cd_ciclo} className="p-3 cursor-pointer  hover:bg-slate-50 flex">
-                {editFlag==cd_ciclo?
-                  <input maxLength={10} type="text" className="w-[50%]" id="nm_ciclo" value={cicloName} onChange={e=>setCicloName(e.target.value)} />:
-                  <p className="">{nm_ciclo}</p>
-                }
-                <div className="ml-auto">
-                  {editFlag!=cd_ciclo?
-                  <Pencil height={18} onClick={e=>{setEditFlag(cd_ciclo); setCicloName(nm_ciclo)}} className="inline cursor-pointer hover:text-yellow-800" />:
-                  <Check height={18} onClick={e=>{setEditFlag(''); atualizaCiclo(cd_curso, cd_ciclo)}} className="inline cursor-pointer hover:text-yellow-800" />}
-                  <Trash2 height={18} onClick={e=>{deleteCiclo(cd_ciclo)}} className="inline cursor-pointer hover:text-red-800" />
+        <div className="">
+          <div className="flex font-bold mx-auto w-[80%]">
+            <select value={opt} onChange={e=>{setOpt(e.target.value)}} className="text-red-800 text-[18pt] ml-5">
+              <option value="1">Turnos</option>
+              <option value="2">Ciclos</option>
+              <option value="3">Professores</option>
+            </select>
+
+            {opt!='3' && <button className="text-[25pt] ml-auto h-9 translate-y-[-10px] hover:text-green-500" onClick={e=>{
+              if(opt=='2') criaCiclo()
+                else criaTurno()
+            }}>+</button>}
+          </div>
+          <div className="bg-zinc-200 mx-auto w-[80%] p-2 overflow-auto h-[5.5cm]">
+
+          {opt=='2' && ciclos.length>0?
+              ciclos.map(({cd_ciclo, nm_ciclo, cd_curso})=>(
+                <div key={cd_ciclo} className="p-3 cursor-pointer  hover:bg-slate-50 flex">
+                  {editFlag==cd_ciclo?
+                    <input maxLength={10} type="text" className="w-[50%]" id="nm_ciclo" value={cicloName} onChange={e=>setCicloName(e.target.value)} />:
+                    <p className="">{nm_ciclo}</p>
+                  }
+                  <div className="ml-auto">
+                    {editFlag!=cd_ciclo?
+                    <Pencil height={18} onClick={e=>{setEditFlag(cd_ciclo); setCicloName(nm_ciclo)}} className="inline cursor-pointer hover:text-yellow-800" />:
+                    <Check height={18} onClick={e=>{setEditFlag(''); atualizaCiclo(cd_curso, cd_ciclo)}} className="inline cursor-pointer hover:text-yellow-800" />}
+                    <Trash2 height={18} onClick={e=>{deleteCiclo(cd_ciclo)}} className="inline cursor-pointer hover:text-red-800" />
+                  </div>
                 </div>
-              </div>
-            )):
-            <div>Nenhum ciclo cadastrado...</div>
-          }
+              )):opt=='1' && turnos.length>0?
+                turnos.map(({cd_turno, nm_turno, cd_curso})=>(
+                  <div key={cd_turno} className="p-3 cursor-pointer  hover:bg-slate-50 flex">
+                    {editFlag==cd_turno?
+                      <input maxLength={10} type="text" className="w-[50%]" id="nm_ciclo" value={turnoName} onChange={e=>setTurnoName(e.target.value)} />:
+                      <p className="">{nm_turno}</p>
+                    }
+                    <div className="ml-auto">
+                      {editFlag!=cd_turno?
+                      <Pencil height={18} onClick={e=>{setEditFlag(cd_turno); setTurnoName(nm_turno)}} className="inline cursor-pointer hover:text-yellow-800" />:
+                      <Check height={18} onClick={e=>{setEditFlag(''); atualizaTurno(cd_curso, cd_turno)}} className="inline cursor-pointer hover:text-yellow-800" />}
+                      <Trash2 height={18} onClick={e=>{deleteTurno(cd_turno)}} className="inline cursor-pointer hover:text-red-800" />
+                    </div>
+                  </div>
+                )):
+                (<div>{
+                  opt=='1'?'Nenhum turno cadastrado nesse curso...':
+                  opt=='2'?'Nenhum ciclo cadastrado nesse curso...':
+                  'Nenhum professor de estágio responsável por esse curso...'
+                }</div>)
+            }
+          </div>
         </div>
+
       </div>
       <CabecalhoDiretoria page='cur' nome={nome} />
       <Filtro 
@@ -302,7 +383,7 @@ export default function Home() {
 
                   {editCurso==cd_curso?
                     <td><input maxLength={10} type="text" className="w-[50%]" id="cd_curso" value={newCurso} onChange={e=>setNewCurso(e.target.value)} /></td>:
-                    <td onClick={e=>{buscarCiclos(cd_curso); setCursoCod(cd_curso)}} className="">{nm_curso}</td>
+                    <td onClick={e=>{buscarTurnos(cd_curso); buscarCiclos(cd_curso); setCursoCod(cd_curso)}} className="">{nm_curso}</td>
                   }
 
                   {editCurso==cd_curso?
