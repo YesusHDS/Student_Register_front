@@ -10,7 +10,7 @@ export default function Filtro({filter1='', filter2='', filter3='', set1, set2, 
                 <div className="flex"><span className="m-1 w-[85px]"></span><input onClick={e=>{
                     btn('visible')
                     if(btn2) btn2('visible')
-                }} className=" cursor-pointer min-w-[220px] text-white w-[80%] bg-red-700 hover:bg-red-800" type="button" value={`Cadastrar novo ${opt}`} /></div>
+                }} className=" cursor-pointer min-w-[220px] text-white w-[80%] bg-red-700 hover:bg-red-800" type="button" value={`Cadastrar ${opt}`} /></div>
             </form>
         </div>
     )

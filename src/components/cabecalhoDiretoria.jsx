@@ -34,6 +34,9 @@ export default function CabecalhoDiretoria({nome='', page=''}){
             <a className={`text-[18pt] w-[10%] py-[1.5%] ${page=='cur'?'bg-red-900':'bg-red-800'} hover:bg-red-900 transition-colors`} href="http://localhost:3000/cursoList">
                 <h2 className={'text-center'}>Cursos</h2>
             </a>
+            <a className={`text-[1.5vw] w-[10%] py-[1.5%] ${page=='emp'?'bg-red-900':'bg-red-800'} hover:bg-red-900 transition-colors`} href="http://localhost:3000/empresaList">
+                <h2 className={'text-center'}>Empresas</h2>
+            </a>
             <div onClick={e=>{
               let drop = document.getElementById('drop')
               let down = document.getElementById('down')

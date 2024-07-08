@@ -202,8 +202,6 @@ export default function Home() {
       }
     }).then(res=>{
 
-      console.log(res);
-
       axios({
         method: 'get',
         url: `https://student-register-bnaf.onrender.com/curso?search=${filtroCurso}`,
@@ -351,7 +349,7 @@ export default function Home() {
       </div>
       <CabecalhoDiretoria page='cur' nome={nome} />
       <Filtro 
-        filter1={'Curso'} set1={setFiltroCurso}
+        filter1={'Nome'} set1={setFiltroCurso}
         filter2={''} set2={''}
         filter3={''} set3={''}
         btn={setDarkcreen}
