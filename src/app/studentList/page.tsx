@@ -13,7 +13,10 @@ import Filtro from '../../components/filtro'
 
 export default function Home() {
 
-  
+  const [empresas, setEmpresas] = useState([{
+    cd_empresa: '',
+    nm_empresa: ''
+  }])
 
   const [nome,setNome] = useState('')
   const [curso,setCurso] = useState('')
@@ -25,20 +28,35 @@ export default function Home() {
 
   const [estagiarios, setEstagiarios] = useState([{
     cd_curso: '',
-    cd_registromatricula: '',
-    dt_periodocomeco: '',
-    dt_periodotermino: '',
-    nm_empresa: '',
+    cd_registroMatricula: '',
+    nm_statusMatricula: '',
+    nm_turno: '',
+    nm_ciclo: '',
+    dt_inicioEstagio: '',
+    qt_horaEstagioEntrada: '',
+    qt_horasEstagio: '',
+    cd_empresa: '',
+    ic_check: false,
+    dt_periodoComeco: '',
+    dt_periodoTermino: '',
     nm_estagiario: ''
   }])
 
   const [darkscreen, setDarkcreen] = useState('invisible')
   const [erro, setErro] = useState('')
-  const [newNome, setNewNome] = useState('')
+  const [newCurso, setNewCurso] = useState('')
   const [newRA, setNewRA] = useState('')
-  const [newEmpresa, setNewEmpresa] = useState('')
+  const [newStatus, setNewStatus] = useState('')
+  const [newTurno, setNewTurno] = useState('')
+  const [newCiclo, setNewCiclo] = useState('')
+  const [newInicioEstagio, setNewInicioEstagio] = useState('')
+  const [newHoraEntrada, setNewHoraEntrada] = useState('')
+  const [newHorasEstagio, setNewHorasEstagio] = useState('')
+  const [newEmpresa, setNewEmpresa] = useState('0')
+  const [check, setCheck] = useState(false)
   const [newComeco, setNewComeco] = useState('')
   const [newTermino, setNewTermino] = useState('')
+  const [newNome, setNewNome] = useState('')
 
   function newValidar(){
     setErro('')
@@ -54,17 +72,50 @@ export default function Home() {
       val = false
     } 
 
-    if(newEmpresa.length==0){
-      setErro('O campo empresa é obrigatório!')
+    if(newHorasEstagio.length==0){
+      setErro('Insira a carga horária diária!')
       val = false
     }
 
+    if(newHoraEntrada.length==0){
+      setErro('Insira o horário de entrada no estágio!')
+      val = false
+    }
+
+    if(newInicioEstagio.length==0){
+      setErro('Insira a data de início do estágio!')
+      val = false
+    }
+
+    if(newEmpresa.length==0){
+      setErro('Selecione uma empresa!')
+      val = false
+    }
+
+    if(newCiclo.length==0){
+      setErro('O campo ciclo é obrigatório!')
+      val = false
+    }
+
+    if(newTurno.length==0){
+      setErro('O campo turno é obrigatório!')
+      val = false
+    }
+
+    if(newCurso.length==0){
+      setErro('Selecione o curso!')
+      val = false
+    }
+
+    if(newStatus.length==0){
+      setErro('O status da matricula é obrigatório!')
+      val = false
+    }
 
     if(newRA.length==0){
       setErro('O campo RA é obrigatório!')
       val = false
     }
-
 
     if(newNome.length==0){
       setErro('O campo nome é obrigatório!')
@@ -79,20 +130,34 @@ export default function Home() {
         data: {
           cd_curso: localStorage.getItem('cd_curso') ?? '',
           cd_registroMatricula: newRA,
+          nm_statusMatricula: newStatus,
+          nm_turno: newTurno,
+          nm_ciclo: newCiclo,
+          dt_inicioEstagio: `${newInicioEstagio.split('-')[1]}/${newInicioEstagio.split('-')[2]}/${newInicioEstagio.split('-')[0]}`,
+          qt_horaEstagioEntrada: newHoraEntrada,
+          qt_horasEstagio: newHorasEstagio,
+          cd_empresa: newEmpresa,
+          ic_check: check,
           dt_periodoComeco: `${newComeco.split('-')[1]}/${newComeco.split('-')[2]}/${newComeco.split('-')[0]}`,
           dt_periodoTermino: `${newTermino.split('-')[1]}/${newTermino.split('-')[2]}/${newTermino.split('-')[0]}`,
-          nm_empresa: newEmpresa,
           nm_estagiario: newNome
         }
       }).then(e=>{
-        setEstagiarios([...estagiarios, {
-          cd_curso: localStorage.getItem('cd_curso') ?? '',
-          cd_registromatricula: newRA,
-          dt_periodocomeco: `${newComeco.split('-')[1]}/${newComeco.split('-')[2]}/${newComeco.split('-')[0]}`,
-          dt_periodotermino: `${newTermino.split('-')[1]}/${newTermino.split('-')[2]}/${newTermino.split('-')[0]}`,
-          nm_empresa: newEmpresa,
-          nm_estagiario: newNome
-        }])
+        // setEstagiarios([...estagiarios, {
+        //   cd_curso: localStorage.getItem('cd_curso') ?? '',
+        //   cd_registroMatricula: newRA,
+        //   nm_statusMatricula: newStatus,
+        //   nm_turno: newTurno,
+        //   nm_ciclo: newCiclo,
+        //   dt_inicioEstagio: `${newInicioEstagio.split('-')[1]}/${newInicioEstagio.split('-')[2]}/${newInicioEstagio.split('-')[0]}`,
+        //   qt_horaEstagioEntrada: newHoraEntrada,
+        //   qt_horasEstagio: newHorasEstagio,
+        //   cd_empresa: newEmpresa,
+        //   ic_check: false,
+        //   dt_periodoComeco: `${newComeco.split('-')[1]}/${newComeco.split('-')[2]}/${newComeco.split('-')[0]}`,
+        //   dt_periodoTermino: `${newTermino.split('-')[1]}/${newTermino.split('-')[2]}/${newTermino.split('-')[0]}`,
+        //   nm_estagiario: newNome
+        // }])
 
         window.location.reload()
       }).catch(e=>{
@@ -115,7 +180,7 @@ export default function Home() {
         token: localStorage.getItem('token')
       }
     }).then(({data})=>{
-      if (data.length == 0) window.location.replace('https://sr-front.vercel.app/') 
+      if (data.length == 0) window.location.replace('http://localhost:3000/') 
     })
 
     axios({
@@ -123,6 +188,13 @@ export default function Home() {
       url: `https://student-register-bnaf.onrender.com/estagiario?search=${filtroNome}&empresa=${filtroEmpresa}&RA=${filtroRA}&curso=${localStorage.getItem('cd_curso')}`,
     }).then(res =>{
       setEstagiarios(res.data)
+    })
+
+    axios({
+      method: 'get',
+      url: `https://student-register-bnaf.onrender.com/empresa`,
+    }).then(res =>{
+      setEmpresas(res.data)
     })
 
   },[filtroNome, filtroEmpresa, filtroRA])
@@ -133,27 +205,65 @@ export default function Home() {
       url: `https://student-register-bnaf.onrender.com/estagiario/${ra}`
     })
   
-    setEstagiarios(estagiarios.filter(({cd_registromatricula})=>cd_registromatricula != ra))
+    setEstagiarios(estagiarios.filter(({cd_registroMatricula})=>cd_registroMatricula != ra))
   }
 
 
   return (
     <div className="h-screen">
       <div onClick={e=>{
-        setNewNome('')
+        setNewCurso('')
         setNewRA('')
+        setNewStatus('')
+        setNewTurno('')
+        setNewCiclo('')
+        setNewInicioEstagio('')
+        setNewHoraEntrada('')
+        setNewHorasEstagio('')
         setNewEmpresa('')
+        setCheck(false)
         setNewComeco('')
         setNewTermino('')
+        setNewNome('')
         setErro('')
         setDarkcreen('invisible')
         }} className={`bg-black/80 fixed w-[100%] h-[100vh] ${darkscreen}`}></div>
-      <div className={`fixed bg-white w-[30%] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ${darkscreen}`}>
+      <div className={`fixed bg-white w-[30%] min-w-[300px] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ${darkscreen}`}>
       <h1 className="text-red-800 text-[18pt] font-bold text-center">Novo Aluno</h1>
-      <form onSubmit={e=>{e.preventDefault()}} action="#" className="bg-red-800 text-white w-[92%] mx-auto text-[14pt] p-3 flex flex-col" >
+      <form onSubmit={e=>{e.preventDefault()}} action="#" className="bg-red-800 text-white w-[92%] mx-auto text-[14pt] p-3 flex flex-col h-[10cm] overflow-auto" >
         Nome <input value={newNome} onChange={e=>{setNewNome(e.target.value)}} type="text" className="w-full text-black p-1 mb-3" />
         RA <input value={newRA} onChange={e=>{setNewRA(e.target.value)}} type="text" className="w-full text-black p-1 mb-3" />
-        Empresa <input value={newEmpresa} onChange={e=>{setNewEmpresa(e.target.value)}} type="text" className="w-full text-black p-1 mb-3" />
+        Status da Matricula 
+        <select className="w-full text-black p-1 mb-3" value={newStatus} onChange={e=>{setNewStatus(e.target.value)}}>
+          <option disabled value={'2'}>Selecione a empresa...</option>
+          <option value={'0'}>Matriculado</option>
+          <option value={'1'}>Trancado</option>
+        </select>
+        Turno <input value={newTurno} onChange={e=>{setNewTurno(e.target.value)}} type="text" className="w-full text-black p-1 mb-3" />
+        Ciclo <input value={newCiclo} onChange={e=>{setNewCiclo(e.target.value)}} type="text" className="w-full text-black p-1 mb-3" />
+        Empresa
+        <select id='select' className="w-full text-black p-1 mb-3" value={newEmpresa} onChange={e=>{setNewEmpresa(e.target.value)}}>
+          <option disabled value={'0'}>Selecione a empresa...</option>
+          {
+            empresas.length>0 &&
+            empresas.map(({
+              cd_empresa,
+              nm_empresa
+            })=>(
+              <option key={cd_empresa} value={cd_empresa}>{nm_empresa}</option>
+            ))
+          }
+        </select>
+
+        Data de início do estágio 
+        <div><input type="date" className="w-full text-black p-1 mb-3" value={newHoraEntrada} onChange={e=>{setNewHoraEntrada(e.target.value)}} /></div>
+
+        Hora de entrada
+        <input type="number" max={24} min={0} className="w-full text-black p-1 mb-3" value={newHoraEntrada} onChange={e=>{setNewHoraEntrada(e.target.value)}} />
+
+        Carga horária diária
+        <input type="number" max={24} min={0} className="w-full text-black p-1 mb-3" value={newHorasEstagio} onChange={e=>{setNewHorasEstagio(e.target.value)}} />
+
         Período <div><input value={newComeco} onChange={e=>{setNewComeco(e.target.value)}} type="date" className="w-[40%] text-black p-1 mb-3" /> até <input onChange={e=>{setNewTermino(e.target.value)}} type="date" className="w-[40%] text-black p-1 mb-3" /></div>
         <div className="bg-white text-red-600 w-full text-center">
             {erro}
@@ -184,18 +294,26 @@ export default function Home() {
             {
               estagiarios.length>0 &&
               estagiarios.map(({
+                cd_curso,
                 nm_estagiario, 
-                cd_registromatricula, 
-                nm_empresa, 
-                dt_periodocomeco, 
-                dt_periodotermino
+                cd_registroMatricula, 
+                cd_empresa, 
+                nm_statusMatricula,
+                nm_turno,
+                nm_ciclo,
+                dt_inicioEstagio,
+                qt_horaEstagioEntrada,
+                qt_horasEstagio,
+                ic_check,
+                dt_periodoComeco, 
+                dt_periodoTermino
               })=>(
-                <tr key={cd_registromatricula} className="text-left bg-white h-10">
+                <tr key={cd_registroMatricula} className="text-left bg-white h-10">
                   <td className="">{nm_estagiario}</td>
-                  <td className="">{cd_registromatricula}</td>
-                  <td className="">{nm_empresa}</td>
-                  <td className="">{`${dt_periodocomeco.slice(0,10).split('-')[2]}/${dt_periodocomeco.slice(0,10).split('-')[1]}/${dt_periodocomeco.slice(0,10).split('-')[0]}`} até {`${dt_periodotermino.slice(0,10).split('-')[2]}/${dt_periodotermino.slice(0,10).split('-')[1]}/${dt_periodotermino.slice(0,10).split('-')[0]}`}</td>
-                  <td className=""><Trash2 onClick={e=>{deleteEstagiario(cd_registromatricula)}} className="cursor-pointer hover:text-red-800" /></td>
+                  <td className="">{cd_registroMatricula}</td>
+                  <td className="">{cd_empresa}</td>
+                  <td className="">{`${dt_periodoComeco.slice(0,10).split('-')[2]}/${dt_periodoComeco.slice(0,10).split('-')[1]}/${dt_periodoComeco.slice(0,10).split('-')[0]}`} até {`${dt_periodoTermino.slice(0,10).split('-')[2]}/${dt_periodoTermino.slice(0,10).split('-')[1]}/${dt_periodoTermino.slice(0,10).split('-')[0]}`}</td>
+                  <td className=""><Trash2 onClick={e=>{deleteEstagiario(cd_registroMatricula)}} className="cursor-pointer hover:text-red-800" /></td>
                 </tr>
               ))
             }

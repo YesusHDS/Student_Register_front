@@ -87,7 +87,7 @@ export default function Home() {
         method: 'post',
         url: 'https://student-register-bnaf.onrender.com/estagiario',
         data: {
-          cd_curso: localStorage.getItem('cd_curso') ?? '',
+          cd_curso: newCurso,
           cd_registroMatricula: newRA,
           dt_periodoComeco: `${newComeco.split('-')[1]}/${newComeco.split('-')[2]}/${newComeco.split('-')[0]}`,
           dt_periodoTermino: `${newTermino.split('-')[1]}/${newTermino.split('-')[2]}/${newTermino.split('-')[0]}`,
@@ -95,14 +95,14 @@ export default function Home() {
           nm_estagiario: newNome
         }
       }).then(e=>{
-        setEstagiarios([...estagiarios, {
-          cd_curso: localStorage.getItem('cd_curso') ?? '',
-          cd_registromatricula: newRA,
-          dt_periodocomeco: `${newComeco.split('-')[1]}/${newComeco.split('-')[2]}/${newComeco.split('-')[0]}`,
-          dt_periodotermino: `${newTermino.split('-')[1]}/${newTermino.split('-')[2]}/${newTermino.split('-')[0]}`,
-          nm_empresa: newEmpresa,
-          nm_estagiario: newNome
-        }])
+        // setEstagiarios([...estagiarios, {
+        //   cd_curso: newCurso,
+        //   cd_registromatricula: newRA,
+        //   dt_periodocomeco: `${newComeco.split('-')[1]}/${newComeco.split('-')[2]}/${newComeco.split('-')[0]}`,
+        //   dt_periodotermino: `${newTermino.split('-')[1]}/${newTermino.split('-')[2]}/${newTermino.split('-')[0]}`,
+        //   nm_empresa: newEmpresa,
+        //   nm_estagiario: newNome
+        // }])
 
         window.location.reload()
       })
@@ -123,7 +123,7 @@ export default function Home() {
         token: localStorage.getItem('token')
       }
     }).then(({data})=>{
-      if (data.length == 0) window.location.replace('https://sr-front.vercel.app/') 
+      if (data.length == 0) window.location.replace('http://localhost:3000/') 
     })
 
     axios({

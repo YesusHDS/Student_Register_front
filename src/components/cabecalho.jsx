@@ -11,8 +11,8 @@ export default function Cabecalho({nome='', curso=''}){
         <div className="w-full flex flex-row px-10 pt-3">
           <Image className="w-[15%] h-[10vh]" priority={true} src="/Logo_Fatec.png" width={291} height={126} alt="Logo da Fatec Praia Grande"/>
           <div className="w-full flex flex-row-reverse gap-16">
-          <Image className="w-[15%] h-[10vh]" src="/Logo_SP.png" width={402} height={140} alt="Logo do Governo do Estado de São Paulo"/>
-          <Image className="w-[10%] h-[10vh]" src="/Logo_CPS.png" width={168} height={110} alt="Logo do Centro Paula Souza"/>
+          <Image className="w-[15%] h-[10vh]" priority={true} src="/Logo_SP.png" width={402} height={140} alt="Logo do Governo do Estado de São Paulo"/>
+          <Image className="w-[10%] h-[10vh]" priority={true} src="/Logo_CPS.png" width={168} height={110} alt="Logo do Centro Paula Souza"/>
           </div>
         </div>
         <nav className="w-full text-white font-bold">

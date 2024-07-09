@@ -22,7 +22,7 @@ export default function Home() {
         token: localStorage.getItem('token')
       }
     }).then(({data})=>{
-      if (data.length == 1) window.location.assign('https://sr-front.vercel.app/studentList')
+      if (data.length == 1) window.location.assign('http://localhost:3000/studentList')
     })
   },[])
 
@@ -59,8 +59,8 @@ export default function Home() {
             localStorage.setItem('cd_curso',resp.data[0].cd_curso)
             localStorage.setItem('nm_curso',resp.data[0].nm_curso)
 
-            if(resp.data[0].nm_tipo == 'professor') window.location.replace("https://sr-front.vercel.app/studentList")
-            else window.location.replace("https://sr-front.vercel.app/studentListDir")
+            if(resp.data[0].nm_tipo == 'professor') window.location.replace("http://localhost:3000/studentList")
+            else window.location.replace("http://localhost:3000/studentListDir")
 
           } else setLoginCheck(true)
           
