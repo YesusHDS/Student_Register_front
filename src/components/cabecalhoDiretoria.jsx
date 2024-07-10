@@ -25,16 +25,16 @@ export default function CabecalhoDiretoria({nome='', page=''}){
         <nav className="w-full text-white font-bold">
           <div className="flex row-span-2">
             <h1 className="text-[18pt] w-[60%]  py-[1.5%] px-[2%] bg-red-800">CADASTRO DE {page=='est'?'ESTUDANTES':page=='prof'?'PROFESSORES':page=='cur'?'CURSOS':'EMPRESAS'}</h1>
-            <a className={`text-[1.5vw] align-middle w-[10%] py-[1.5%] ${page=='est'?'bg-red-900':'bg-red-800'} hover:bg-red-900 transition-colors`} href="http://localhost:3000/studentListDir">
+            <a className={`text-[1.5vw] align-middle w-[10%] py-[1.5%] ${page=='est'?'bg-red-900':'bg-red-800'} hover:bg-red-900 transition-colors`} href="https://sr-front.vercel.app/studentListDir">
                 <h2 className={'text-center'}>Estudantes</h2>
             </a>
-            <a className={`text-[1.5vw] w-[10%] py-[1.5%] ${page=='prof'?'bg-red-900':'bg-red-800'}  hover:bg-red-900 transition-colors`} href="http://localhost:3000/teacherList">
+            <a className={`text-[1.5vw] w-[10%] py-[1.5%] ${page=='prof'?'bg-red-900':'bg-red-800'}  hover:bg-red-900 transition-colors`} href="https://sr-front.vercel.app/teacherList">
                 <h2 className={'text-center'}>Professores</h2>
             </a>
-            <a className={`text-[18pt] w-[10%] py-[1.5%] ${page=='cur'?'bg-red-900':'bg-red-800'} hover:bg-red-900 transition-colors`} href="http://localhost:3000/cursoList">
+            <a className={`text-[18pt] w-[10%] py-[1.5%] ${page=='cur'?'bg-red-900':'bg-red-800'} hover:bg-red-900 transition-colors`} href="https://sr-front.vercel.app/cursoList">
                 <h2 className={'text-center'}>Cursos</h2>
             </a>
-            <a className={`text-[1.5vw] w-[10%] py-[1.5%] ${page=='emp'?'bg-red-900':'bg-red-800'} hover:bg-red-900 transition-colors`} href="http://localhost:3000/empresaListDir">
+            <a className={`text-[1.5vw] w-[10%] py-[1.5%] ${page=='emp'?'bg-red-900':'bg-red-800'} hover:bg-red-900 transition-colors`} href="https://sr-front.vercel.app/empresaListDir">
                 <h2 className={'text-center'}>Empresas</h2>
             </a>
             <div onClick={e=>{
@@ -62,7 +62,7 @@ export default function CabecalhoDiretoria({nome='', page=''}){
           </div>
           <span id='down' onClick={e=>{
             localStorage.clear()
-            window.location.replace('http://localhost:3000/')
+            window.location.replace('https://sr-front.vercel.app/')
           }} className="cursor-pointer font-normal text-[16pt] bg-red-900 hover:text-red-800 transition-colors text-center w-[10%] absolute right-0 translate-y-[-100%] z-[-1]">Sair</span>
         </nav>
       </header>

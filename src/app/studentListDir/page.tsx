@@ -169,7 +169,7 @@ export default function Home() {
 
   useEffect(()=>{
 
-    if(localStorage.getItem('nm_tipo') == 'professor') window.location.replace("http://localhost:3000/studentList")
+    if(localStorage.getItem('nm_tipo') == 'professor') window.location.replace("https://sr-front.vercel.app/studentList")
 
     setNome(localStorage.getItem('nm_login') ?? '')
     setCurso(localStorage.getItem('nm_curso') ?? '')
@@ -182,7 +182,7 @@ export default function Home() {
         token: localStorage.getItem('token')
       }
     }).then(({data})=>{
-      if (data.length == 0) window.location.replace('http://localhost:3000/') 
+      if (data.length == 0) window.location.replace('https://sr-front.vercel.app/') 
     })
 
     axios({

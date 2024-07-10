@@ -18,10 +18,10 @@ export default function Cabecalho({nome='', curso='', page=''}){
         <nav className="w-full text-white font-bold">
           <div className="flex row-span-2">
             <h1 className="text-[18pt] w-[90%]  py-[1.5%] px-[2%] bg-red-800">CADASTRO DE {page=='est'?'ESTUDANTES':'EMPRESAS'}  {curso && `- ${curso.toUpperCase()}`}</h1>
-            <a className={`text-[1.5vw] align-middle w-[10%] py-[1.5%] ${page=='est'?'bg-red-900':'bg-red-800'} hover:bg-red-900 transition-colors`} href="http://localhost:3000/studentList">
+            <a className={`text-[1.5vw] align-middle w-[10%] py-[1.5%] ${page=='est'?'bg-red-900':'bg-red-800'} hover:bg-red-900 transition-colors`} href="https://sr-front.vercel.app/studentList">
                 <h2 className={'text-center'}>Estudantes</h2>
             </a>
-            <a className={`text-[1.5vw] w-[10%] py-[1.5%] ${page=='emp'?'bg-red-900':'bg-red-800'}  hover:bg-red-900 transition-colors`} href="http://localhost:3000/empresaList">
+            <a className={`text-[1.5vw] w-[10%] py-[1.5%] ${page=='emp'?'bg-red-900':'bg-red-800'}  hover:bg-red-900 transition-colors`} href="https://sr-front.vercel.app/empresaList">
                 <h2 className={'text-center'}>Empresas</h2>
             </a>
             <div onClick={e=>{
@@ -49,7 +49,7 @@ export default function Cabecalho({nome='', curso='', page=''}){
           </div>
           <span id='down' onClick={e=>{
             localStorage.clear()
-            window.location.replace('http://localhost:3000/')
+            window.location.replace('https://sr-front.vercel.app/')
             
           }} className="cursor-pointer font-normal text-[16pt] bg-red-900 hover:text-red-800 transition-colors text-center w-[10%] absolute right-0 translate-y-[-100%] z-[-1]">Sair</span>
         </nav>
