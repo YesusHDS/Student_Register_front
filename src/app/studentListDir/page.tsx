@@ -22,6 +22,30 @@ export default function Home() {
     cd_empresa: '',
     nm_empresa: ''
   }])
+
+  const [turnos, setTurnos] = useState([{
+    cd_turno: '',
+    cd_curso: '',
+    nm_turno: ''
+  }])
+
+  const [turnosOpt, setTurnosOpt] = useState([{
+    cd_turno: '',
+    cd_curso: '',
+    nm_turno: ''
+  }])
+
+  const [ciclos, setCiclos] = useState([{
+    cd_ciclo: '',
+    cd_curso: '',
+    nm_ciclo: ''
+  }])
+
+  const [ciclosOpt, setCiclosOpt] = useState([{
+    cd_ciclo: '',
+    cd_curso: '',
+    nm_ciclo: ''
+  }])
   
   const [nome,setNome] = useState('')
   const [curso,setCurso] = useState('')
@@ -52,7 +76,7 @@ export default function Home() {
   const [newRA, setNewRA] = useState('')
   const [newStatus, setNewStatus] = useState('0')
   const [newTurno, setNewTurno] = useState('0')
-  const [newCiclo, setNewCiclo] = useState('')
+  const [newCiclo, setNewCiclo] = useState('0')
   const [newInicioEstagio, setNewInicioEstagio] = useState('')
   const [newHoraEntrada, setNewHoraEntrada] = useState('')
   const [newHorasEstagio, setNewHorasEstagio] = useState('')
@@ -85,12 +109,12 @@ export default function Home() {
       val = false
     }
 
-    if(newCiclo.length==0){
+    if(newCiclo=='0' || newCiclo=='1' || newCiclo=='2'){
       setErro('O campo ciclo é obrigatório!')
       val = false
     }
 
-    if(newTurno=='0'){
+    if(newTurno=='0' || newTurno=='1' || newTurno=='2'){
       setErro('O campo turno é obrigatório!')
       val = false
     }
@@ -180,6 +204,20 @@ export default function Home() {
       setEmpresas(res.data)
     })
 
+    axios({
+      method: 'get',
+      url: `https://student-register-bnaf.onrender.com/turno`,
+    }).then(res =>{
+      setTurnos(res.data)
+    })
+
+    axios({
+      method: 'get',
+      url: `https://student-register-bnaf.onrender.com/ciclo`,
+    }).then(res =>{
+      setCiclos(res.data)
+    })
+
   },[filtroNome, filtroEmpresa, filtroRA])
 
   const deleteEstagiario = (ra:String)=>{
@@ -201,6 +239,18 @@ export default function Home() {
     let name = cursos.find(({cd_curso})=>cd_curso == cd)?.nm_curso
 
     return name
+  }
+
+  const buscaTurno = (cd:String)=>{
+    let turnosOpt = turnos.filter(({cd_curso})=>cd_curso == cd)
+
+    setTurnosOpt(turnosOpt)
+  }
+
+  const buscaCiclo = (cd:String)=>{
+    let ciclosOpt = ciclos.filter(({cd_curso})=>cd_curso == cd)
+
+    setCiclosOpt(ciclosOpt)
   }
 
   const setarEstagiario = ({
@@ -226,6 +276,8 @@ export default function Home() {
       setNewEmpresa(cd_empresa)
       setCheck(ic_check)
       setNewNome(nm_estagiario)
+      buscaCiclo(cd_curso)
+      buscaTurno(cd_curso)
 
     setEstagiarioScreen('visible')
   }
@@ -264,24 +316,89 @@ export default function Home() {
   }
 
   const atualizaEstagiario = ()=>{
-    axios({
-      method: 'put',
-      url: `https://student-register-bnaf.onrender.com/estagiario/${newRA}`,
-      data: {
-        cd_curso: newCurso, 
-        cd_empresa: newEmpresa, 
-        nm_estagiario: newNome,
-        nm_statusMatricula: newStatus,
-        nm_turno: newTurno,
-        nm_ciclo: newCiclo,
-        dt_inicioEstagio: newInicioEstagio,
-        qt_horaEstagioEntrada: newHoraEntrada,
-        qt_horasEstagio: newHorasEstagio,
-        ic_check: check
-      }
-    }).then(res=>{
-      window.location.reload()
-    })
+    setErro('')
+    let val = true
+
+    if(newHorasEstagio.length==0){
+      setErro('Insira a carga horária diária!')
+      val = false
+    }
+
+    if(newHoraEntrada.length==0){
+      setErro('Insira o horário de entrada no estágio!')
+      val = false
+    }
+
+    if(newInicioEstagio.length==0){
+      setErro('Insira a data de início do estágio!')
+      val = false
+    }
+
+    if(newEmpresa=='0'){
+      setErro('Selecione uma empresa!')
+      val = false
+    }
+
+    if(newCiclo=='0' || newCiclo=='1' || newCiclo=='2'){
+      setErro('O campo ciclo é obrigatório!')
+      val = false
+    }
+
+    if(ciclosOpt.length==0){
+      setErro('O campo ciclo é obrigatório!')
+      val = false
+    }
+
+    if(newTurno=='0' || newTurno=='1' || newTurno=='2'){
+      setErro('O campo turno é obrigatório!')
+      val = false
+    }
+
+    if(turnosOpt.length==0){
+      setErro('O campo turno é obrigatório!')
+      val = false
+    }
+
+    if(newCurso=='0'){
+      setErro('Selecione um curso!')
+      val = false
+    }
+
+    if(newStatus=='0'){
+      setErro('O status da matricula é obrigatório!')
+      val = false
+    }
+
+    if(newRA.length==0){
+      setErro('O campo RA é obrigatório!')
+      val = false
+    }
+
+    if(newNome.length==0){
+      setErro('O campo nome é obrigatório!')
+      val = false
+    }
+
+    if(val){
+      axios({
+        method: 'put',
+        url: `https://student-register-bnaf.onrender.com/estagiario/${newRA}`,
+        data: {
+          cd_curso: newCurso, 
+          cd_empresa: newEmpresa, 
+          nm_estagiario: newNome,
+          nm_statusMatricula: newStatus,
+          nm_turno: newTurno,
+          nm_ciclo: newCiclo,
+          dt_inicioEstagio: newInicioEstagio,
+          qt_horaEstagioEntrada: newHoraEntrada,
+          qt_horasEstagio: newHorasEstagio,
+          ic_check: check
+        }
+      }).then(res=>{
+        window.location.reload()
+      })
+    }
 
   }
 
@@ -292,7 +409,7 @@ export default function Home() {
         setNewRA('')
         setNewStatus('0')
         setNewTurno('0')
-        setNewCiclo('')
+        setNewCiclo('0')
         setNewInicioEstagio('')
         setNewHoraEntrada('')
         setNewHorasEstagio('')
@@ -300,6 +417,7 @@ export default function Home() {
         setCheck(false)
         setNewNome('')
         setErro('')
+        setEditFlag('')
         setDarkcreen('invisible')
         setEstagiarioScreen('invisible')
         }} className={`bg-black/80 fixed w-[100%] h-[100vh] ${darkscreen == 'visible' || estagiarioScreen == 'visible'? 'visible': 'invisible'}`}></div>
@@ -308,8 +426,16 @@ export default function Home() {
         <form onSubmit={e=>{e.preventDefault()}} action="#" className="bg-red-800 text-white w-[92%] mx-auto text-[14pt] p-3 flex flex-col h-[10cm] overflow-auto" >
           Nome <input value={newNome} onChange={e=>{setNewNome(e.target.value)}} type="text" className="w-full text-black p-1 mb-3" />
           RA <input value={newRA} onChange={e=>{setNewRA(e.target.value)}} type="text" className="w-full text-black p-1 mb-3" />
+
+          Status da Matricula 
+          <select className="w-full text-black p-1 mb-3" value={newStatus} onChange={e=>{setNewStatus(e.target.value)}}>
+            <option disabled value={'0'}>Selecione o status...</option>
+            <option value={'Matriculado'}>Matriculado</option>
+            <option value={'Trancado'}>Trancado</option>
+          </select>
+
           Curso
-          <select id='select' className="w-full text-black p-1 mb-3" value={newCurso} onChange={e=>{setNewCurso(e.target.value)}}>
+          <select id='select' className="w-full text-black p-1 mb-3" value={newCurso} onChange={e=>{setNewCurso(e.target.value); buscaTurno(e.target.value); buscaCiclo(e.target.value)}}>
             <option disabled value={'0'}>Selecione o curso...</option>
             {
               cursos.length>0 &&
@@ -322,20 +448,36 @@ export default function Home() {
             }
           </select>
 
-          Status da Matricula 
-          <select className="w-full text-black p-1 mb-3" value={newStatus} onChange={e=>{setNewStatus(e.target.value)}}>
-            <option disabled value={'0'}>Selecione o status...</option>
-            <option value={'Matriculado'}>Matriculado</option>
-            <option value={'Trancado'}>Trancado</option>
-          </select>
           Turno
-          <select className="w-full text-black p-1 mb-3" value={newTurno} onChange={e=>{setNewTurno(e.target.value)}}>
+          <select disabled={newCurso!='0' && turnosOpt.length>0?false:true} className="w-full text-black p-1 mb-3" value={newCurso=='0'?'1':turnosOpt.length>0?newTurno:'2'} onChange={e=>{setNewTurno(e.target.value)}}>
             <option disabled value={'0'}>Selecione o turno...</option>
-            <option value={'Matutino'}>Matutino</option>
-            <option value={'Vespertino'}>Vespertino</option>
-            <option value={'Noturno'}>Noturno</option>
+            <option disabled hidden value={'1'}>Selecione o curso primeiro...</option>
+            <option disabled hidden value={'2'}>Curso sem turnos...</option>
+            {
+              turnosOpt.length>0 &&
+              turnosOpt.map(({
+                cd_turno,
+                nm_turno
+              })=>(
+                <option key={cd_turno} value={nm_turno}>{nm_turno}</option>
+              ))
+            }
           </select>
-          Ciclo <input value={newCiclo} onChange={e=>{setNewCiclo(e.target.value)}} type="text" className="w-full text-black p-1 mb-3" />
+          Ciclo 
+          <select disabled={newCurso!='0' && ciclosOpt.length>0?false:true} className="w-full text-black p-1 mb-3" value={newCurso=='0'?'1':ciclosOpt.length>0?newCiclo:'2'} onChange={e=>{setNewCiclo(e.target.value)}}>
+            <option disabled value={'0'}>Selecione o ciclo...</option>
+            <option disabled hidden value={'1'}>Selecione o curso primeiro...</option>
+            <option disabled hidden value={'2'}>Curso sem ciclos...</option>
+            {
+              ciclosOpt.length>0 &&
+              ciclosOpt.map(({
+                cd_ciclo,
+                nm_ciclo
+              })=>(
+                <option key={cd_ciclo} value={nm_ciclo}>{nm_ciclo}</option>
+              ))
+            }
+          </select>
           Empresa
           <select id='select' className="w-full text-black p-1 mb-3" value={newEmpresa} onChange={e=>{setNewEmpresa(e.target.value)}}>
             <option disabled value={'0'}>Selecione a empresa...</option>
@@ -370,7 +512,7 @@ export default function Home() {
           <h1 className="text-red-800 text-[18pt] font-bold text-center">Estagiario</h1>
           {editFlag!=newRA?
             <Pencil onClick={e=>{setEditFlag(newRA)}} className="text-[25pt] ml-auto h-9 translate-y-[-10px] hover:text-yellow-800" />:
-            <Check onClick={e=>{setEditFlag(''); atualizaEstagiario()}} className="text-[25pt] ml-auto h-9 translate-y-[-10px] hover:text-yellow-800" />
+            <Check onClick={e=>{atualizaEstagiario()}} className="text-[25pt] ml-auto h-9 translate-y-[-10px] hover:text-yellow-800" />
           }
         </div>
         <div className="font-bold mx-auto w-[80%]" >
@@ -403,7 +545,7 @@ export default function Home() {
           <div className="my-3 flex">
             Curso:
             {editFlag==newRA?
-              <select id='select' className="w-full text-black p-1 mb-3" value={newCurso} onChange={e=>{setNewCurso(e.target.value)}}>
+              <select id='select' className="w-full text-black p-1 mb-3" value={newCurso} onChange={e=>{setNewCurso(e.target.value); buscaTurno(e.target.value); setNewTurno('0'); buscaCiclo(e.target.value); setNewCiclo('0') }}>
               <option disabled value={'0'}>Selecione o curso...</option>
               {
                 cursos.length>0 &&
@@ -423,12 +565,20 @@ export default function Home() {
           <div className="my-3 flex">
             Turno:
             {editFlag==newRA?
-              <select className="w-full text-black p-1 mb-3" value={newTurno} onChange={e=>{setNewTurno(e.target.value)}}>
-              <option disabled value={'0'}>Selecione o turno...</option>
-              <option value={'Matutino'}>Matutino</option>
-              <option value={'Vespertino'}>Vespertino</option>
-              <option value={'Noturno'}>Noturno</option>
-            </select>:
+              <select disabled={newCurso!='0' && turnosOpt.length>0?false:true} className="w-full text-black p-1 mb-3" value={newCurso=='0'?'1':turnosOpt.length>0?newTurno:'2'} onChange={e=>{setNewTurno(e.target.value)}}>
+                <option disabled value={'0'}>Selecione o turno...</option>
+                <option disabled hidden value={'1'}>Selecione o curso primeiro...</option>
+                <option disabled hidden value={'2'}>Curso sem turnos...</option>
+                {
+                  turnosOpt.length>0 &&
+                  turnosOpt.map(({
+                    cd_turno,
+                    nm_turno
+                  })=>(
+                    <option key={cd_turno} value={nm_turno}>{nm_turno}</option>
+                  ))
+                }
+              </select>:
               <p className="ml-3">{newTurno}</p>
             }
           </div>
@@ -436,7 +586,20 @@ export default function Home() {
           <div className="my-3 flex">
             Ciclo:
             {editFlag==newRA?
-              <input maxLength={10} type="text" className="ml-3 w-[50%]" id="nm_ciclo" value={newCiclo} onChange={e=>setNewCiclo(e.target.value)} />:
+              <select disabled={newCurso!='0' && ciclosOpt.length>0?false:true} className="w-full text-black p-1 mb-3" value={newCurso=='0'?'1':ciclosOpt.length>0?newCiclo:'2'} onChange={e=>{setNewCiclo(e.target.value)}}>
+              <option disabled value={'0'}>Selecione o ciclo...</option>
+              <option disabled hidden value={'1'}>Selecione o curso primeiro...</option>
+              <option disabled hidden value={'2'}>Curso sem ciclos...</option>
+              {
+                ciclosOpt.length>0 &&
+                ciclosOpt.map(({
+                  cd_ciclo,
+                  nm_ciclo
+                })=>(
+                  <option key={cd_ciclo} value={nm_ciclo}>{nm_ciclo}</option>
+                ))
+              }
+            </select>:
               <p className="ml-3">{newCiclo}</p>
             }
           </div>
@@ -483,6 +646,10 @@ export default function Home() {
               <input maxLength={10} type="text" className="ml-3 w-[50%]" id="nm_ciclo" value={newHorasEstagio} onChange={e=>setNewHorasEstagio(e.target.value)} />:
               <p className="ml-3">{newHorasEstagio}</p>
             }
+          </div>
+
+          <div className="bg-white text-red-600 w-full text-center">
+              {erro}
           </div>
 
         </div>
