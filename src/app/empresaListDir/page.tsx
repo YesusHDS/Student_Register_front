@@ -6,7 +6,7 @@ import {Trash2, Pencil, Check} from 'lucide-react'
 
 import axios from 'axios'
 
-import Cabecalho from '../../components/cabecalho'
+import CabecalhoDiretoria from '../../components/cabecalhoDiretoria'
 
 import Filtro from '../../components/filtro'
 
@@ -125,7 +125,7 @@ export default function Home() {
         <input type="button" onClick={e=>{newValidar()}} value="CADASTRAR" className="cursor-pointer text-red-800 bg-white p-3 w-[50%] mx-auto mt-5 hover:bg-red-700 hover:text-white transition-colors" />
       </form>
       </div>
-      <Cabecalho page='emp' nome={nome} />
+      <CabecalhoDiretoria page='emp' nome={nome} />
       <Filtro 
         filter1={'Nome'} set1={setFiltroEmpresa}
         filter2={''} set2={''}

@@ -37,6 +37,14 @@ export default function Home() {
     nm_ciclo: ''
   }])
 
+  const [professores, setProfessores] = useState([{
+    cd_login: '',
+    nm_login: '',
+    nm_tipo: '',
+    cd_curso: '',
+    nm_curso: ''
+  }])
+
   const [darkscreen, setDarkcreen] = useState('invisible')
   const [newCursoScreen, setNewCursoScreen] = useState('invisible')
   const [ciclosScreen, setCiclosScreen] = useState('invisible')
@@ -124,11 +132,6 @@ export default function Home() {
       url: `https://student-register-bnaf.onrender.com/ciclo?curso=${cd_curso}`
     }).then(res=>{
       setCiclos(res.data)
-
-      setDarkcreen('visible')
-      
-      setCiclosScreen('visible')
-
     })
   }
 
@@ -138,6 +141,17 @@ export default function Home() {
       url: `https://student-register-bnaf.onrender.com/turno?curso=${cd_curso}`
     }).then(res=>{
       setTurnos(res.data)
+    })
+  }
+
+  function buscarProfessores(cd_login:String){
+    axios({
+      method: 'get',
+      url: `https://student-register-bnaf.onrender.com/loginList?curso=${cd_login}`
+    }).then(res=>{
+      setProfessores(res.data)
+      setDarkcreen('visible')
+      setCiclosScreen('visible')
     })
   }
 
@@ -336,6 +350,10 @@ export default function Home() {
                       <Trash2 height={18} onClick={e=>{deleteTurno(cd_turno)}} className="inline cursor-pointer hover:text-red-800" />
                     </div>
                   </div>
+                )):opt=='3' && professores.length>0?professores.map(({cd_login, nm_login})=>(
+                  <div key={cd_login} className="p-3 cursor-default flex">
+                    <p className="">{nm_login}</p>
+                  </div>
                 )):
                 (<div>{
                   opt=='1'?'Nenhum turno cadastrado nesse curso...':
@@ -381,7 +399,7 @@ export default function Home() {
 
                   {editCurso==cd_curso?
                     <td><input maxLength={10} type="text" className="w-[50%]" id="cd_curso" value={newCurso} onChange={e=>setNewCurso(e.target.value)} /></td>:
-                    <td onClick={e=>{buscarTurnos(cd_curso); buscarCiclos(cd_curso); setCursoCod(cd_curso)}} className="">{nm_curso}</td>
+                    <td onClick={e=>{buscarTurnos(cd_curso); buscarCiclos(cd_curso); buscarProfessores(cd_curso); setCursoCod(cd_curso)}} className="">{nm_curso}</td>
                   }
 
                   {editCurso==cd_curso?

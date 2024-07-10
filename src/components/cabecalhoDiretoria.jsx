@@ -24,7 +24,7 @@ export default function CabecalhoDiretoria({nome='', page=''}){
         </div>
         <nav className="w-full text-white font-bold">
           <div className="flex row-span-2">
-            <h1 className="text-[18pt] w-[60%]  py-[1.5%] px-[2%] bg-red-800">CADASTRO DE {page=='est'?'ESTUDANTES':page=='prof'?'PROFESSORES':'CURSOS'}</h1>
+            <h1 className="text-[18pt] w-[60%]  py-[1.5%] px-[2%] bg-red-800">CADASTRO DE {page=='est'?'ESTUDANTES':page=='prof'?'PROFESSORES':page=='cur'?'CURSOS':'EMPRESAS'}</h1>
             <a className={`text-[1.5vw] align-middle w-[10%] py-[1.5%] ${page=='est'?'bg-red-900':'bg-red-800'} hover:bg-red-900 transition-colors`} href="http://localhost:3000/studentListDir">
                 <h2 className={'text-center'}>Estudantes</h2>
             </a>
@@ -34,7 +34,7 @@ export default function CabecalhoDiretoria({nome='', page=''}){
             <a className={`text-[18pt] w-[10%] py-[1.5%] ${page=='cur'?'bg-red-900':'bg-red-800'} hover:bg-red-900 transition-colors`} href="http://localhost:3000/cursoList">
                 <h2 className={'text-center'}>Cursos</h2>
             </a>
-            <a className={`text-[1.5vw] w-[10%] py-[1.5%] ${page=='emp'?'bg-red-900':'bg-red-800'} hover:bg-red-900 transition-colors`} href="http://localhost:3000/empresaList">
+            <a className={`text-[1.5vw] w-[10%] py-[1.5%] ${page=='emp'?'bg-red-900':'bg-red-800'} hover:bg-red-900 transition-colors`} href="http://localhost:3000/empresaListDir">
                 <h2 className={'text-center'}>Empresas</h2>
             </a>
             <div onClick={e=>{

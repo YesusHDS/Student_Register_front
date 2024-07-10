@@ -431,7 +431,7 @@ export default function Home() {
 
         </div>
       </div>
-      <Cabecalho curso={curso} nome={nome} />
+      <Cabecalho curso={curso} nome={nome} page='est' />
       <Filtro 
         filter1={'Nome'} set1={setFiltroNome}
         filter2={'Empresa'} set2={setFiltroEmpresa}
