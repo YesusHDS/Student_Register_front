@@ -37,8 +37,6 @@ export default function Home() {
     qt_horasestagio: '',
     cd_empresa: '',
     ic_check: false,
-    dt_periodocomeco: '',
-    dt_periodotermino: '',
     nm_estagiario: ''
   }])
 
@@ -55,24 +53,12 @@ export default function Home() {
   const [newHorasEstagio, setNewHorasEstagio] = useState('')
   const [newEmpresa, setNewEmpresa] = useState('0')
   const [check, setCheck] = useState(false)
-  const [newComeco, setNewComeco] = useState('')
-  const [newTermino, setNewTermino] = useState('')
   const [newNome, setNewNome] = useState('')
   const [editFlag, setEditFlag] = useState('')
 
   function newValidar(){
     setErro('')
     let val = true
-
-    if(newTermino.length==0){
-      setErro('O fim do período é obrigatório!')
-      val = false
-    } 
-
-    if(newComeco.length==0){
-      setErro('O começo do período é obrigatório!')
-      val = false
-    } 
 
     if(newHorasEstagio.length==0){
       setErro('Insira a carga horária diária!')
@@ -88,9 +74,6 @@ export default function Home() {
       setErro('Insira a data de início do estágio!')
       val = false
     }
-
-    console.log();
-    
 
     if(newEmpresa=='0'){
       setErro('Selecione uma empresa!')
@@ -138,8 +121,6 @@ export default function Home() {
           qt_horasEstagio: newHorasEstagio,
           cd_empresa: newEmpresa,
           ic_check: check,
-          dt_periodoComeco: `${newComeco.split('-')[1]}/${newComeco.split('-')[2]}/${newComeco.split('-')[0]}`,
-          dt_periodoTermino: `${newTermino.split('-')[1]}/${newTermino.split('-')[2]}/${newTermino.split('-')[0]}`,
           nm_estagiario: newNome
         }
       }).then(e=>{
@@ -210,8 +191,6 @@ export default function Home() {
     qt_horasestagio='',
     cd_empresa='',
     ic_check=false,
-    dt_periodocomeco='',
-    dt_periodotermino='',
     nm_estagiario=''})=>{
       setNewCurso(cd_curso)
       setNewRA(cd_registromatricula)
@@ -223,8 +202,6 @@ export default function Home() {
       setNewHorasEstagio(qt_horasestagio)
       setNewEmpresa(cd_empresa)
       setCheck(ic_check)
-      setNewComeco(dt_periodocomeco)
-      setNewTermino(dt_periodotermino)
       setNewNome(nm_estagiario)
 
     setEstagiarioScreen('visible')
@@ -241,16 +218,12 @@ export default function Home() {
     qt_horasestagio='',
     cd_empresa='',
     ic_check=false,
-    dt_periodocomeco='',
-    dt_periodotermino='',
     nm_estagiario=''})=>{
       axios({
         method: 'put',
         url: `https://student-register-bnaf.onrender.com/estagiario/${cd_registromatricula}`,
         data: {
-          cd_curso, 
-          dt_periodoComeco: dt_periodocomeco, 
-          dt_periodoTermino: dt_periodotermino, 
+          cd_curso,
           cd_empresa, 
           nm_estagiario,
           nm_statusMatricula: nm_statusmatricula,
@@ -273,8 +246,6 @@ export default function Home() {
         url: `https://student-register-bnaf.onrender.com/estagiario/${newRA}`,
         data: {
           cd_curso: newCurso, 
-          dt_periodoComeco: newComeco, 
-          dt_periodoTermino: newTermino, 
           cd_empresa: newEmpresa, 
           nm_estagiario: newNome,
           nm_statusMatricula: newStatus,
@@ -305,8 +276,6 @@ export default function Home() {
         setNewHorasEstagio('')
         setNewEmpresa('0')
         setCheck(false)
-        setNewComeco('')
-        setNewTermino('')
         setNewNome('')
         setErro('')
         setDarkcreen('invisible')
@@ -354,7 +323,6 @@ export default function Home() {
           Carga horária diária
           <input type="number" max={24} min={0} className="w-full text-black p-1 mb-3" value={newHorasEstagio} onChange={e=>{setNewHorasEstagio(e.target.value)}} />
 
-          Período <div><input value={newComeco} onChange={e=>{setNewComeco(e.target.value)}} type="date" className="w-[40%] text-black p-1 mb-3" /> até <input onChange={e=>{setNewTermino(e.target.value)}} type="date" className="w-[40%] text-black p-1 mb-3" /></div>
           <div className="bg-white text-red-600 w-full text-center">
               {erro}
           </div>
@@ -461,22 +429,6 @@ export default function Home() {
             }
           </div>
 
-          <div className="my-3 flex">
-            Começo do estágio:
-            {editFlag==newRA?
-              <input maxLength={10} type="date" className="ml-3 w-[50%]" id="nm_ciclo" value={newComeco} onChange={e=>setNewComeco(e.target.value)} />:
-              <p className="ml-3">{`${newComeco.slice(0,10).split('-')[2]}/${newComeco.slice(0,10).split('-')[1]}/${newComeco.slice(0,10).split('-')[0]}`}</p>
-            }
-          </div>
-
-          <div className="my-3 flex">
-            Término do estágio:
-            {editFlag==newRA?
-              <input maxLength={10} type="date" className="ml-3 w-[50%]" id="nm_ciclo" value={newTermino} onChange={e=>setNewTermino(e.target.value)} />:
-              <p className="ml-3">{`${newTermino.slice(0,10).split('-')[2]}/${newTermino.slice(0,10).split('-')[1]}/${newTermino.slice(0,10).split('-')[0]}`}</p>
-            }
-          </div>
-
         </div>
       </div>
       <Cabecalho curso={curso} nome={nome} />
@@ -495,7 +447,7 @@ export default function Home() {
               <th className="w-[30%]">Nome</th>
               <th className="w-[24%]">RA</th>
               <th className="w-[24%]">Empresa</th>
-              <th className="w-[20%]">Período</th>
+              <th className="w-[20%]"></th>
             </tr>
           </thead>
           <tbody className="text-[12pt]">
@@ -512,9 +464,7 @@ export default function Home() {
                 dt_inicioestagio,
                 qt_horaestagioentrada,
                 qt_horasestagio,
-                ic_check,
-                dt_periodocomeco, 
-                dt_periodotermino
+                ic_check
               })=>(
                 <tr key={cd_registromatricula} className="text-left bg-white h-10 cursor-pointer hover:bg-slate-50">
                   <td className="" onClick={e=>{setarEstagiario({
@@ -528,8 +478,6 @@ export default function Home() {
                     qt_horasestagio,
                     cd_empresa,
                     ic_check,
-                    dt_periodocomeco,
-                    dt_periodotermino,
                     nm_estagiario})}}>{nm_estagiario}</td>
                   <td className="" onClick={e=>{setarEstagiario({
                     cd_curso,
@@ -542,8 +490,6 @@ export default function Home() {
                     qt_horasestagio,
                     cd_empresa,
                     ic_check,
-                    dt_periodocomeco,
-                    dt_periodotermino,
                     nm_estagiario})}}>{cd_registromatricula}</td>
                   <td className="" onClick={e=>{setarEstagiario({
                     cd_curso,
@@ -556,23 +502,7 @@ export default function Home() {
                     qt_horasestagio,
                     cd_empresa,
                     ic_check,
-                    dt_periodocomeco,
-                    dt_periodotermino,
                     nm_estagiario})}}>{buscaEmpresa(cd_empresa)}</td>
-                  <td className="" onClick={e=>{setarEstagiario({
-                    cd_curso,
-                    cd_registromatricula,
-                    nm_statusmatricula,
-                    nm_turno,
-                    nm_ciclo,
-                    dt_inicioestagio,
-                    qt_horaestagioentrada,
-                    qt_horasestagio,
-                    cd_empresa,
-                    ic_check,
-                    dt_periodocomeco,
-                    dt_periodotermino,
-                    nm_estagiario})}}>{`${dt_periodocomeco.slice(0,10).split('-')[2]}/${dt_periodocomeco.slice(0,10).split('-')[1]}/${dt_periodocomeco.slice(0,10).split('-')[0]}`} até {`${dt_periodotermino.slice(0,10).split('-')[2]}/${dt_periodotermino.slice(0,10).split('-')[1]}/${dt_periodotermino.slice(0,10).split('-')[0]}`}</td>
                   <td className=""><input type="checkbox" checked={ic_check} onChange={e=>{alteraCheck({
                     cd_curso,
                     cd_registromatricula,
@@ -584,8 +514,6 @@ export default function Home() {
                     qt_horasestagio,
                     cd_empresa,
                     ic_check: !ic_check,
-                    dt_periodocomeco,
-                    dt_periodotermino,
                     nm_estagiario
                   })}} /></td>
                   <td className=""><Trash2 onClick={e=>{deleteEstagiario(cd_registromatricula)}} className="cursor-pointer hover:text-red-800" /></td>
