@@ -86,7 +86,7 @@ export default function Home() {
                 <span className="font-bold text-2xl">
                   Nome {nomeCheck && <span className="font-bold text-xl text-red-600">Campo obrigatório</span>}
                 </span> 
-                <input onChange={e=>{setNome(e.target.value)}} className="bg-zinc-300 h-16 pl-5 text-2xl" type="text"/>
+                <input onChange={e=>{setNome(e.target.value)}} className="bg-zinc-300 h-16 pl-5 text-2xl" type="text" maxLength={45}/>
               </div>
 
               <div className="mt-2 flex flex-col w-11/12 mx-auto">

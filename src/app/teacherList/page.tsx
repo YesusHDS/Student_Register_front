@@ -126,7 +126,7 @@ export default function Home() {
       <div className={`fixed bg-white w-[30%] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ${darkscreen}`}>
       <h1 className="text-red-800 text-[18pt] font-bold text-center">Novo Professor</h1>
       <form onSubmit={e=>{e.preventDefault()}} action="#" className="bg-red-800 text-white w-[92%] mx-auto text-[14pt] p-3 flex flex-col" >
-        Nome <input value={newNome} onChange={e=>{setNewNome(e.target.value)}} type="text" className="w-full text-black p-1 mb-3" />
+        Nome <input value={newNome} onChange={e=>{setNewNome(e.target.value)}} maxLength={45} type="text" className="w-full text-black p-1 mb-3" />
         Curso
         <select id='select' className="w-full text-black p-1 mb-3" value={newCurso} onChange={e=>{setNewCurso(e.target.value)}}>
           <option disabled value={'0'}>Escolha o curso...</option>

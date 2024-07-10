@@ -363,7 +363,7 @@ export default function Home() {
       <div className={`fixed bg-white w-[30%] min-w-[300px] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ${darkscreen}`}>
         <h1 className="text-red-800 text-[18pt] font-bold text-center">Novo Aluno</h1>
         <form onSubmit={e=>{e.preventDefault()}} action="#" className="bg-red-800 text-white w-[92%] mx-auto text-[14pt] p-3 flex flex-col h-[10cm] overflow-auto" >
-          Nome <input value={newNome} onChange={e=>{setNewNome(e.target.value)}} type="text" className="w-full text-black p-1 mb-3" />
+          Nome <input maxLength={45} value={newNome} onChange={e=>{setNewNome(e.target.value)}} type="text" className="w-full text-black p-1 mb-3" />
           RA <input value={newRA} onChange={e=>{setNewRA(e.target.value)}} type="text" className="w-full text-black p-1 mb-3" />
           Status da Matricula 
           <select className="w-full text-black p-1 mb-3" value={newStatus} onChange={e=>{setNewStatus(e.target.value)}}>
@@ -443,7 +443,7 @@ export default function Home() {
           <div className="my-3 flex">
             Nome:
             {editFlag==newRA?
-              <input maxLength={10} type="text" className="ml-3 w-[50%]" id="nm_ciclo" value={newNome} onChange={e=>setNewNome(e.target.value)} />:
+              <input maxLength={45} type="text" className="ml-3 w-[50%]" id="nm_ciclo" value={newNome} onChange={e=>setNewNome(e.target.value)} />:
               <p className="ml-3">{newNome}</p>
             }
 
@@ -530,7 +530,7 @@ export default function Home() {
           <div className="my-3 flex">
             Data de início do estágio:
             {editFlag==newRA?
-              <input maxLength={10} type="date" className="ml-3 w-[50%]" id="nm_ciclo" value={newInicioEstagio} onChange={e=>setNewInicioEstagio(e.target.value)} />:
+              <input type="date" className="ml-3 w-[50%]" id="nm_ciclo" value={newInicioEstagio} onChange={e=>setNewInicioEstagio(e.target.value)} />:
               <p className="ml-3">{`${newInicioEstagio.slice(0,10).split('-')[2]}/${newInicioEstagio.slice(0,10).split('-')[1]}/${newInicioEstagio.slice(0,10).split('-')[0]}`}</p>
             }
           </div>
@@ -538,7 +538,7 @@ export default function Home() {
           <div className="my-3 flex">
             Hora de entrada:
             {editFlag==newRA?
-              <input maxLength={10} type="text" className="ml-3 w-[50%]" id="nm_ciclo" value={newHoraEntrada} onChange={e=>setNewHoraEntrada(e.target.value)} />:
+              <input type="number" max={24} min={0} className="ml-3 w-[50%]" id="nm_ciclo" value={newHoraEntrada} onChange={e=>setNewHoraEntrada(e.target.value)} />:
               <p className="ml-3">{newHoraEntrada}</p>
             }
           </div>
@@ -546,7 +546,7 @@ export default function Home() {
           <div className="my-3 flex">
             Carga horária diária:
             {editFlag==newRA?
-              <input maxLength={10} type="text" className="ml-3 w-[50%]" id="nm_ciclo" value={newHorasEstagio} onChange={e=>setNewHorasEstagio(e.target.value)} />:
+              <input type="number" max={24} min={0} className="ml-3 w-[50%]" id="nm_ciclo" value={newHorasEstagio} onChange={e=>setNewHorasEstagio(e.target.value)} />:
               <p className="ml-3">{newHorasEstagio}</p>
             }
           </div>

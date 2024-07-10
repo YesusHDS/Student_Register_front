@@ -295,11 +295,11 @@ export default function Home() {
       <div className={`fixed bg-white w-[30%] top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] ${newCursoScreen}`}>
       <h1 className="text-red-800 text-[18pt] font-bold text-center">Novo Curso</h1>
       <form onSubmit={e=>{e.preventDefault()}} action="#" className="bg-red-800 text-white w-[92%] mx-auto text-[14pt] p-3 flex flex-col" >
-        Nome do curso <input value={newCurso} onChange={e=>{setNewCurso(e.target.value)}}
+        Nome do curso <input maxLength={45} value={newCurso} onChange={e=>{setNewCurso(e.target.value)}}
         type="text" className="w-full text-black p-1 mb-3" />
-        Quantidade de Ciclos <input value={cicloQtd} onChange={e=>{setCicloQtd(e.target.value)}}
+        Quantidade de Ciclos <input min={0} value={cicloQtd} onChange={e=>{setCicloQtd(e.target.value)}}
         type="number" className="w-full text-black p-1 mb-3" />
-        Ciclo mínimo para estágio <input value={newCicloEstagio} onChange={e=>{setNewCicloEstagio(e.target.value)}}
+        Ciclo mínimo para estágio <input min={0} value={newCicloEstagio} onChange={e=>{setNewCicloEstagio(e.target.value)}}
         type="number" className="w-full text-black p-1 mb-3" />
         <div className="bg-white text-red-600 w-full text-center">
             {erro}
@@ -400,7 +400,7 @@ export default function Home() {
                   
 
                   {editCurso==cd_curso?
-                    <td><input maxLength={10} type="text" className="w-[50%]" id="cd_curso" value={newCurso} onChange={e=>setNewCurso(e.target.value)} /></td>:
+                    <td><input maxLength={45} type="text" className="w-[50%]" id="cd_curso" value={newCurso} onChange={e=>setNewCurso(e.target.value)} /></td>:
                     <td onClick={e=>{buscarTurnos(cd_curso); buscarCiclos(cd_curso); buscarProfessores(cd_curso); setCursoCod(cd_curso)}} className="">{nm_curso}</td>
                   }
 

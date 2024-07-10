@@ -156,7 +156,7 @@ export default function Home() {
                 >
                   
                   {editEmpresa==cd_empresa?
-                    <td><input maxLength={10} type="text" className="w-[50%]" id="cd_curso" value={newEmpresa} onChange={e=>setNewEmpresa(e.target.value)} /></td>:
+                    <td><input type="text" className="w-[50%]" id="cd_curso" value={newEmpresa} onChange={e=>setNewEmpresa(e.target.value)} /></td>:
                     <td className="">{nm_empresa}</td>
                   }
 
