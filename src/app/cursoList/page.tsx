@@ -157,6 +157,8 @@ export default function Home() {
 
   useEffect(()=>{
 
+    if(localStorage.getItem('nm_tipo') == 'professor') window.location.replace("http://localhost:3000/studentList")
+
     setNome(localStorage.getItem('nm_login') ?? '')
 
     axios({
